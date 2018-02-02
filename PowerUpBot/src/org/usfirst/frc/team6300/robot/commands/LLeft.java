@@ -9,12 +9,13 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class LLeft extends CommandGroup {
     public LLeft(Robot robot) {
-    	addParallel(new HoldWrist(robot.wrist, robot.lifter));
-    	addParallel(new LiftArmTo(robot.lifter, robot.lifter.switchAngle));
-        addParallel(new CloseClaw(robot.claw));
-        addSequential(new AutoDrive(robot.drivetrain, 0.5, true, 1.0));
-        addSequential(new OpenClaw(robot.claw));
-        addSequential(new LiftArmTo(robot.lifter, robot.lifter.switchAngle + 10));
+//    	addParallel(new HoldWrist(robot.wrist, robot.lifter));
+//    	addParallel(new LiftArmTo(robot.lifter, robot.lifter.switchAngle));
+//		addParallel(new CloseClaw(robot.claw));
+//		addSequential(new AutoDrive(robot.drivetrain, 0.5, true, 1.0));
+//		addSequential(new OpenClaw(robot.claw));
+//		addSequential(new LiftArmTo(robot.lifter, robot.lifter.switchAngle + 10));
+    	
     	// Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

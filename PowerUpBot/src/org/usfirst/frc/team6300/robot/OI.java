@@ -47,6 +47,6 @@ public class OI {
 	private final JoystickButton cubeRTrig = new JoystickButton(cubeJoy, rTrigBtn);
 	
 	public OI(Robot robot) {
-		cubeRTrig.whenPressed(new CloseClaw(robot.claw));
+		//cubeRTrig.whenPressed(new CloseClaw(robot.claw));
 	}
 }

@@ -26,9 +26,9 @@ import org.usfirst.frc.team6300.robot.subsystems.*;
  */
 public class Robot extends TimedRobot {
 	public final Drivetrain drivetrain = new Drivetrain();
-	public final Lifter lifter = new Lifter();
-	public final Claw claw = new Claw();
-	public final Wrist wrist = new Wrist();
+	//public final Lifter lifter = new Lifter();
+	//public final Claw claw = new Claw();
+	//public final Wrist wrist = new Wrist();
 	public OI oi;
 
 	Command autonomousCommand;
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
 		if (gameData.charAt(0) == 'L') {
 			switch (startingSide) {
 			case "left":
-				autonomousCommand = new LLeft(this);
+//				autonomousCommand = new LLeft(this);
 				break;
 			case "right":
 //				autonomousCommand = new LRight(drivetrain, lifter, claw);
@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
 		else {
 			System.out.println("Invalid game data!");
 		}
-		// schedule the autonomous command (example)
+		// schedule the autonomous command
 		if (autonomousCommand != null) {
 			autonomousCommand.start();
 		}
