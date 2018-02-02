@@ -10,7 +10,7 @@ package org.usfirst.frc.team6300.robot.subsystems;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+//import edu.wpi.first.wpilibj.DoubleSolenoid;
 //import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -27,8 +27,8 @@ public class Drivetrain extends Subsystem {
 	private final SpeedController rfMotor = new Victor(RobotMap.lfMotor);
 	private final SpeedController rbMotor = new Victor(RobotMap.lfMotor);
 	
-	private final DoubleSolenoid lSol = new DoubleSolenoid(RobotMap.lSolPort1, RobotMap.lSolPort2);
-	private final DoubleSolenoid rSol = new DoubleSolenoid(RobotMap.rSolPort1, RobotMap.rSolPort2);
+//	private final DoubleSolenoid lSol = new DoubleSolenoid(RobotMap.lSolPort1, RobotMap.lSolPort2);
+//	private final DoubleSolenoid rSol = new DoubleSolenoid(RobotMap.rSolPort1, RobotMap.rSolPort2);
 	
 //	private final Encoder lEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
 //	private final Encoder rEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
@@ -48,8 +48,8 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public void shiftDown() {
-		lSol.set(DoubleSolenoid.Value.kForward);
-		rSol.set(DoubleSolenoid.Value.kForward);
+//		lSol.set(DoubleSolenoid.Value.kForward);
+//		rSol.set(DoubleSolenoid.Value.kForward);
 	}
 	
 	public void teleDrive(Joystick joy, int forwardAxis, int rotateAxis) {
