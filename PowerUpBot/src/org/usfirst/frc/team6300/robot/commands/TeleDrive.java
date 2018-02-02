@@ -10,7 +10,6 @@ package org.usfirst.frc.team6300.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.usfirst.frc.team6300.robot.OI;
-import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
 
 /**
