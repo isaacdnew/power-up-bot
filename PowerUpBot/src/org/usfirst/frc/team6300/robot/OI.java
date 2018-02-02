@@ -7,36 +7,46 @@
 
 package org.usfirst.frc.team6300.robot;
 
+import org.usfirst.frc.team6300.robot.commands.CloseClaw;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	//// CREATING BUTTONS
-	// One type of button is a joystick button which is any button on a
-	//// joystick.
-	// You create one by telling it which joystick it's on and which button
-	// number it is.
-	// Joystick stick = new Joystick(port);
-	// Button button = new JoystickButton(stick, buttonNumber);
-
-	// There are a few additional built in buttons you can use. Additionally,
-	// by subclassing Button you can create custom triggers and bind those to
-	// commands the same as any other Button.
-
-	//// TRIGGERING COMMANDS WITH BUTTONS
-	// Once you have a button, it's trivial to bind it to a button in one of
-	// three ways:
-
-	// Start the command when the button is pressed and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenPressed(new ExampleCommand());
-
-	// Run the command while the button is being held down and interrupt it once
-	// the button is released.
-	// button.whileHeld(new ExampleCommand());
-
-	// Start the command when the button is released and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenReleased(new ExampleCommand());
+	//xbox controller axis mappings
+	public static final int leftX = 0;
+	public static final int leftY = 1;
+	public static final int lTrigAxis = 2;
+	public static final int rTrigAxis = 3;
+	public static final int rightX = 4;
+	public static final int rightY = 5;
+	
+	//xbox controller button mappings
+	public static final int a = 1;
+	public static final int b = 2;
+	public static final int x = 3;
+	public static final int y = 4;
+	public static final int lTrigBtn = 5;
+	public static final int rTrigBtn = 6;
+	
+	public static final Joystick driveJoy = new Joystick(0);
+//	private final JoystickButton driveA = new JoystickButton(driveJoy, a);
+//	private final JoystickButton driveB = new JoystickButton(driveJoy, b);
+//	private final JoystickButton driveX = new JoystickButton(driveJoy, x);
+//	private final JoystickButton driveY = new JoystickButton(driveJoy, y);
+	
+	public static final Joystick cubeJoy = new Joystick(1);
+//	private final JoystickButton cubeA = new JoystickButton(cubeJoy, a);
+//	private final JoystickButton cubeB = new JoystickButton(cubeJoy, b);
+//	private final JoystickButton cubeX = new JoystickButton(cubeJoy, x);
+//	private final JoystickButton cubeY = new JoystickButton(cubeJoy, y);
+	private final JoystickButton cubeRTrig = new JoystickButton(cubeJoy, rTrigBtn);
+	
+	public OI(Robot robot) {
+		cubeRTrig.whenPressed(new CloseClaw(robot.claw));
+	}
 }

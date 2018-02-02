@@ -7,28 +7,32 @@
 
 package org.usfirst.frc.team6300.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team6300.robot.commands.ExampleCommand;
-import org.usfirst.frc.team6300.robot.subsystems.ExampleSubsystem;
+
+import org.usfirst.frc.team6300.robot.commands.*;
+import org.usfirst.frc.team6300.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
+ * functions corresponding to each mode, as described in the Timed Robot
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the build.properties file in the
  * project.
  */
 public class Robot extends TimedRobot {
-	public static final ExampleSubsystem kExampleSubsystem
-			= new ExampleSubsystem();
-	public static OI m_oi;
+	public final Drivetrain drivetrain = new Drivetrain();
+	public final Lifter lifter = new Lifter();
+	public final Claw claw = new Claw();
+	public final Wrist wrist = new Wrist();
+	public OI oi;
 
-	Command m_autonomousCommand;
-	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	Command autonomousCommand;
+	SendableChooser<String> sideChooser = new SendableChooser<>();
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -36,10 +40,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		m_oi = new OI();
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", m_chooser);
+		oi = new OI(this);
+		sideChooser.addDefault("Starting from Left", "left");
+		sideChooser.addObject("Starting from Center", "center");
+		sideChooser.addObject("Starting from Right", "right");
+		
+		SmartDashboard.putData("Starting Side", sideChooser);
 	}
 
 	/**
@@ -49,7 +55,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
 	}
 
 	@Override
@@ -70,18 +75,51 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = m_chooser.getSelected();
-
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
+		String gameData = DriverStation.getInstance().getGameSpecificMessage();
+		String startingSide = sideChooser.getSelected();
+		if (gameData.charAt(0) == 'L') {
+			switch (startingSide) {
+			case "left":
+				autonomousCommand = new LLeft(this);
+				break;
+			case "right":
+//				autonomousCommand = new LRight(drivetrain, lifter, claw);
+				break;
+			case "center":
+//				autonomousCommand = new LCenter(drivetrain, lifter, claw);
+				break;
+			default:
+				System.out.println("Invalid starting side string!");
+				break;
+			}
+		}	
+		else if (gameData.charAt(0) == 'R'){
+			switch (startingSide) {
+			case "left":
+//				autonomousCommand = new RLeft(drivetrain, lifter, claw);
+				break;
+			case "right":
+//				autonomousCommand = new RRight(drivetrain, lifter, claw);
+				break;
+			case "center":
+//				autonomousCommand = new RCenter(drivetrain, lifter, claw);
+				break;
+			default:
+				System.out.println("Invalid starting side string!");
+				break;
+			}
+		}
+		else {
+			System.out.println("Invalid game data!");
+		}
 		// schedule the autonomous command (example)
-		if (m_autonomousCommand != null) {
-			m_autonomousCommand.start();
+		if (autonomousCommand != null) {
+			autonomousCommand.start();
+		}
+		else {
+			System.out.println("autonomousCommand is null! Running auto line code.");
+			autonomousCommand = new AutoLine(drivetrain);
+			autonomousCommand.start();
 		}
 	}
 
@@ -99,8 +137,8 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (m_autonomousCommand != null) {
-			m_autonomousCommand.cancel();
+		if (autonomousCommand != null) {
+			autonomousCommand.cancel();
 		}
 	}
 
