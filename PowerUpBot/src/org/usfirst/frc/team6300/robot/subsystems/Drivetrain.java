@@ -14,7 +14,7 @@ import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 //import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -22,10 +22,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Drivetrain extends Subsystem {
 	
-	private final SpeedController lfMotor = new Victor(RobotMap.lfMotor);
-	private final SpeedController lbMotor = new Victor(RobotMap.lfMotor);
-	private final SpeedController rfMotor = new Victor(RobotMap.lfMotor);
-	private final SpeedController rbMotor = new Victor(RobotMap.lfMotor);
+	private final SpeedController lfMotor = new VictorSP(RobotMap.lfMotor);
+	private final SpeedController lbMotor = new VictorSP(RobotMap.lfMotor);
+	private final SpeedController rfMotor = new VictorSP(RobotMap.lfMotor);
+	private final SpeedController rbMotor = new VictorSP(RobotMap.lfMotor);
 	
 //	private final DoubleSolenoid lSol = new DoubleSolenoid(RobotMap.lSolPort1, RobotMap.lSolPort2);
 //	private final DoubleSolenoid rSol = new DoubleSolenoid(RobotMap.rSolPort1, RobotMap.rSolPort2);
@@ -34,6 +34,10 @@ public class Drivetrain extends Subsystem {
 //	private final Encoder rEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
 	
 	public Drivetrain() {
+		lfMotor.setInverted(RobotMap.lfInverted);
+		lbMotor.setInverted(RobotMap.lbInverted);
+		rfMotor.setInverted(RobotMap.rfInverted);
+		rbMotor.setInverted(RobotMap.rbInverted);
 	}
 	
 	public void initDefaultCommand() {

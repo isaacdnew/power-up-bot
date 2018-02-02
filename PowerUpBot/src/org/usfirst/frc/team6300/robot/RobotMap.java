@@ -16,9 +16,15 @@ package org.usfirst.frc.team6300.robot;
 public class RobotMap {
 	//Drivetrain
 	public static final int lfMotor = 1;
-	public static final int rfMotor = 2;
 	public static final int lbMotor = 0;
+	public static final int rfMotor = 2;
 	public static final int rbMotor = 3;
+	
+	public static final boolean lfInverted = true;
+	public static final boolean lbInverted = true;
+	public static final boolean rfInverted = false;
+	public static final boolean rbInverted = false;
+	
 	public static final int lSolPort1 = 0;
 	public static final int lSolPort2 = 1;
 	public static final int rSolPort1 = 2;
