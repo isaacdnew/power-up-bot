@@ -3,28 +3,31 @@ package org.usfirst.frc.team6300.robot.subsystems;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.TeleWrist;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 /**
  *
  */
 public class Wrist extends PIDSubsystem {
 	private SpeedController wristMotor = new Victor(RobotMap.wristMotor);
-	private Potentiometer pot = new AnalogPotentiometer(0, 360, 0);
+	private Encoder enc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
 	
     private static final double p = 0;
     private static final double i = 0;
     private static final double d = 0;
     private static final double feedForward = 0;
     private static final double pidPeriod = 0.005;
+    
     public Wrist() {
     	super("wrist", p, i, d, feedForward, pidPeriod);
     	setInputRange(0, 360);
     	setOutputRange(0, 1);
+    	
+    	enc.setDistancePerPulse(1);
     }
     
     public void initDefaultCommand() {
@@ -35,7 +38,7 @@ public class Wrist extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return pot.get();
+        return enc.get();
     }
     
     protected void usePIDOutput(double output) {

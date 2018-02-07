@@ -7,7 +7,7 @@
 
 package org.usfirst.frc.team6300.robot;
 
-import org.usfirst.frc.team6300.robot.commands.CloseClaw;
+import org.usfirst.frc.team6300.robot.commands.*;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -38,6 +38,8 @@ public class OI {
 //	private final JoystickButton driveB = new JoystickButton(driveJoy, b);
 //	private final JoystickButton driveX = new JoystickButton(driveJoy, x);
 //	private final JoystickButton driveY = new JoystickButton(driveJoy, y);
+	private final JoystickButton driveRTrig = new JoystickButton(driveJoy, rTrigBtn);
+	private final JoystickButton driveLTrig = new JoystickButton(driveJoy, lTrigBtn);
 	
 	public static final Joystick cubeJoy = new Joystick(1);
 //	private final JoystickButton cubeA = new JoystickButton(cubeJoy, a);
@@ -48,5 +50,7 @@ public class OI {
 	
 	public OI(Robot robot) {
 		//cubeRTrig.whenPressed(new CloseClaw(robot.claw));
+		driveRTrig.whenPressed(new ShiftUp(robot.drivetrain));
+		driveLTrig.whenPressed(new ShiftDown(robot.drivetrain));
 	}
 }

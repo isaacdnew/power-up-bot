@@ -12,6 +12,7 @@ public class AutoDrive extends Command {
 	private Drivetrain drivetrain;
 	private double seconds;
 	private double power;
+	private boolean lowGear;
 	
 	/**
 	 * Drives the robot straight forward over a specified distance.
@@ -24,6 +25,7 @@ public class AutoDrive extends Command {
     	this.drivetrain = drivetrain;
     	this.seconds = seconds;
     	this.power = power;
+    	this.lowGear = lowGear;
         requires(drivetrain);
     }
 
@@ -42,7 +44,12 @@ public class AutoDrive extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	drivetrain.shiftDown();
+    	if (lowGear) {
+    		drivetrain.shiftDown();
+    	}
+    	else {
+    		drivetrain.shiftUp();
+    	}
     	drivetrain.setForwardPower(power);
     	Timer.delay(seconds);
     	drivetrain.stop();
