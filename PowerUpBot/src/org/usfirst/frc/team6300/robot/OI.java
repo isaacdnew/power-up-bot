@@ -42,15 +42,20 @@ public class OI {
 	private final JoystickButton driveLTrig = new JoystickButton(driveJoy, lTrigBtn);
 	
 	public static final Joystick cubeJoy = new Joystick(1);
-//	private final JoystickButton cubeA = new JoystickButton(cubeJoy, a);
-//	private final JoystickButton cubeB = new JoystickButton(cubeJoy, b);
-//	private final JoystickButton cubeX = new JoystickButton(cubeJoy, x);
+	private final JoystickButton cubeA = new JoystickButton(cubeJoy, a);
+	private final JoystickButton cubeB = new JoystickButton(cubeJoy, b);
+	private final JoystickButton cubeX = new JoystickButton(cubeJoy, x);
 //	private final JoystickButton cubeY = new JoystickButton(cubeJoy, y);
-	private final JoystickButton cubeRTrig = new JoystickButton(cubeJoy, rTrigBtn);
+//	private final JoystickButton cubeRTrig = new JoystickButton(cubeJoy, rTrigBtn);
+//	private final JoystickButton cubeLTrig = new JoystickButton(cubeJoy, lTrigBtn);
 	
 	public OI(Robot robot) {
-		//cubeRTrig.whenPressed(new CloseClaw(robot.claw));
-		driveRTrig.whenPressed(new ShiftUp(robot.drivetrain));
-		driveLTrig.whenPressed(new ShiftDown(robot.drivetrain));
+//		driveRTrig.whenPressed(new ShiftUp(robot.drivetrain));
+//		driveLTrig.whenPressed(new ShiftDown(robot.drivetrain));
+		
+//		cubeA.whenPressed(new LiftArmTo("floor"));
+//		cubeB.whenPressed(new LiftArmTo("switch"));
+//		cubeY.whenPressed(new LiftArmTo("scale"));
+//		cubeRTrig.whenPressed(new CloseClaw(robot.claw));
 	}
 }

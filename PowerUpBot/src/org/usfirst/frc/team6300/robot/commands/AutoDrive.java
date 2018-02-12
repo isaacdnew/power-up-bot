@@ -21,7 +21,7 @@ public class AutoDrive extends Command {
 	 * @param lowGear if true, robot will use low gear. Otherwise, it will use high gear.
 	 * @param seconds the time to drive forward.
 	 */
-    public AutoDrive(Drivetrain drivetrain, double power, boolean lowGear, double seconds) {
+    public AutoDrive(Drivetrain drivetrain, double power, double seconds) {
     	this.drivetrain = drivetrain;
     	this.seconds = seconds;
     	this.power = power;
@@ -44,13 +44,7 @@ public class AutoDrive extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	if (lowGear) {
-    		drivetrain.shiftDown();
-    	}
-    	else {
-    		drivetrain.shiftUp();
-    	}
-    	drivetrain.setForwardPower(power);
+    	drivetrain.setSpeeds(power, power);
     	Timer.delay(seconds);
     	drivetrain.stop();
     }

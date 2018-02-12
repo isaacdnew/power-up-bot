@@ -30,8 +30,8 @@ public class Drivetrain extends PIDSubsystem {
 	private final SpeedController lbMotor = new VictorSP(RobotMap.lbMotor);
 	private final SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
 	private final SpeedController rbMotor = new VictorSP(RobotMap.rbMotor);
-	double leftSpeedFromJoy = 0;
-	double rightSpeedFromJoy = 0;
+	double leftSpeed = 0;
+	double rightSpeed = 0;
 	
 	private final DoubleSolenoid lSol = new DoubleSolenoid(RobotMap.lSolPort1, RobotMap.lSolPort2);
 	private final DoubleSolenoid rSol = new DoubleSolenoid(RobotMap.rSolPort1, RobotMap.rSolPort2);
@@ -80,14 +80,20 @@ public class Drivetrain extends PIDSubsystem {
 	//PID CONTROL
 	@Override
 	protected double returnPIDInput() {
-		return gyro.getAngle();
+		double angle = gyro.getAngle();
+		return angle - (360 * Math.floor(angle / 360));
 	}
 
 	@Override
 	protected void usePIDOutput(double output) {
-		double leftOutput = leftSpeedFromJoy  - output; 
-		double rightOutput = rightSpeedFromJoy + output;
-		setMotorSpeeds(leftOutput, rightOutput);
+		double leftOutput = leftSpeed  - output; 
+		double rightOutput = rightSpeed + output;
+		if (leftOutput > 1 || rightOutput > 1) {
+			double maxOutput = Math.max(leftOutput, rightOutput);
+			leftOutput /= maxOutput;
+			rightOutput /= maxOutput;
+		}
+		setSpeeds(leftOutput, rightOutput);
 	}
 	
 	
@@ -95,15 +101,16 @@ public class Drivetrain extends PIDSubsystem {
 	
 	
 	//DRIVING
-	public void setForwardPower(double power) {
-		setMotorSpeeds(power, power);
-	}
-	
-	public void setMotorSpeeds(double leftSpeed, double rightSpeed) {
-		lfMotor.set(leftSpeed);
-		lbMotor.set(leftSpeed);
-		rfMotor.set(rightSpeed);
-		rbMotor.set(rightSpeed);
+	public void setSpeeds(double leftSpeed, double rightSpeed) {
+		this.leftSpeed = leftSpeed;
+		this.rightSpeed = rightSpeed;
+		
+		if (!getPIDController().isEnabled()) {
+			lfMotor.set(leftSpeed);
+			lbMotor.set(leftSpeed);
+			rfMotor.set(rightSpeed);
+			rbMotor.set(rightSpeed);
+		}
 	}
 	
 	public void stop() {
@@ -123,12 +130,12 @@ public class Drivetrain extends PIDSubsystem {
 		SmartDashboard.putNumber("rotateSpeed", rotateSpeed);
 		
 		//calculate desired motor speeds from 0 to 1
-		leftSpeedFromJoy  = forwardSpeed + rotateSpeed;
-		rightSpeedFromJoy = forwardSpeed - rotateSpeed;
+		leftSpeed  = forwardSpeed + rotateSpeed;
+		rightSpeed = forwardSpeed - rotateSpeed;
 		
 		//set motor speeds if the PID controller isn't doing that already
 		if (!getPIDController().isEnabled()) {
-			setMotorSpeeds(leftSpeedFromJoy, rightSpeedFromJoy);
+			setSpeeds(leftSpeed, rightSpeed);
 		}
 	}
 	
@@ -152,7 +159,7 @@ public class Drivetrain extends PIDSubsystem {
 	}
 	
 	public void updateGear() {
-		if (Math.abs(lEncoder.getRate()) > 1) {
+		if (Math.abs((lEncoder.getRate() + rEncoder.getRate()) / 2) > 18) {
 			shiftUp();
 		}
 		else {

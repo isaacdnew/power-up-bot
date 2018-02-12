@@ -15,15 +15,14 @@ import edu.wpi.first.wpilibj.interfaces.Potentiometer;
  *
  */
 public class Lifter extends PIDSubsystem {
-	private SpeedController liftMotor = new Victor(RobotMap.liftMotor);
+	private SpeedController lMotor = new Victor(RobotMap.lMotor);
+	private SpeedController rMotor = new Victor(RobotMap.rMotor);
 	private Potentiometer pot = new AnalogPotentiometer(0, 360, 0);
     public final double minLiftAngle = 6.52;
     public final double switchAngle = 40;
 	public final double scaleMaxAngle = 180;
 	public final double scaleMidAngle = 40;
 	public final double scaleMinAngle = 40;
-	
-	private double minWristAngle = 90;
 	
     private static final double p = 0;
     private static final double i = 0;
@@ -52,17 +51,7 @@ public class Lifter extends PIDSubsystem {
     }
     
     protected void usePIDOutput(double output) {
-       liftMotor.set(output);
-    }
-    
-    public void teleLift(Joystick joy, int liftAxis) {
-    	disable();
-		liftMotor.set(joy.getRawAxis(liftAxis));
-		enable();
-		setSetpoint(returnPIDInput());
-	}
-    
-    public double getMinWristAngle() {
-    	return minWristAngle;
+       lMotor.set(output);
+       rMotor.set(output);
     }
 }

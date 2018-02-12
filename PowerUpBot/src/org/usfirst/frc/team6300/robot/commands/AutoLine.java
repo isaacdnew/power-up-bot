@@ -10,6 +10,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutoLine extends CommandGroup {
 	
 	public AutoLine(Drivetrain drivetrain) {
-		addSequential(new AutoDrive(drivetrain, 0.5, true, 1.0));
+		addSequential(new AutoDrive(drivetrain, 0.5, 1.0));
 	}
 }

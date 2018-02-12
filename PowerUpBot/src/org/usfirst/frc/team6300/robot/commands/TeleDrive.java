@@ -33,6 +33,7 @@ public class TeleDrive extends Command {
 	@Override
 	protected void execute() {
 		drivetrain.teleDrive(OI.driveJoy, OI.leftY, OI.rightX);
+		drivetrain.updateGear();
 		drivetrain.putEncoderData();
 	}
 

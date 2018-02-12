@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6300.robot.commands;
 
+import org.usfirst.frc.team6300.robot.subsystems.Claw;
 import org.usfirst.frc.team6300.robot.subsystems.Lifter;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -11,10 +12,10 @@ public class LiftArmTo extends Command {
 	Lifter lifter;
 	double degrees;
 	
-    public LiftArmTo(Lifter lifter, double degrees) {
+    public LiftArmTo(Lifter lifter, Claw claw, String position) {
         this.lifter = lifter;
         requires(lifter);
-        this.degrees = degrees;
+        
     }
 
     // Called just before this Command runs the first time
