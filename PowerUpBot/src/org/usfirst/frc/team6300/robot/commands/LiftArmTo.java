@@ -9,13 +9,14 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class LiftArmTo extends Command {
-	Lifter lifter;
-	double degrees;
+	private Lifter lifter;
+	private Claw claw;
+	private String position;
+	private double angle;
 	
     public LiftArmTo(Lifter lifter, Claw claw, String position) {
         this.lifter = lifter;
         requires(lifter);
-        
     }
 
     // Called just before this Command runs the first time
@@ -33,7 +34,7 @@ public class LiftArmTo extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	lifter.setSetpoint(degrees);
+    	lifter.setSetpoint(angle);
     }
 
     // Called when another command which requires one or more of the same

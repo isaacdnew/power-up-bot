@@ -45,6 +45,7 @@ public class RobotMap {
 	public static final int rMotor = 5;
 	public static final int liftEncPort1 = 4;
 	public static final int liftEncPort2 = 5;
+	public static final boolean liftEncInverted = false;
 	
 	public static final int armLengthInches = 44;
 	

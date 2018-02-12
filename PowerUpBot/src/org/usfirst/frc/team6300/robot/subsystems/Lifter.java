@@ -1,28 +1,28 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
-import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.TeleLift;
 
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 /**
  *
  */
 public class Lifter extends PIDSubsystem {
+	private final double startAngle = 14;
+	private final double minAngle = 6.52;
+    private final double switchAngle = 40;
+	private final double scaleMaxAngle = 160;
+	
 	private SpeedController lMotor = new Victor(RobotMap.lMotor);
 	private SpeedController rMotor = new Victor(RobotMap.rMotor);
-	private Potentiometer pot = new AnalogPotentiometer(0, 360, 0);
-    public final double minLiftAngle = 6.52;
-    public final double switchAngle = 40;
-	public final double scaleMaxAngle = 180;
-	public final double scaleMidAngle = 40;
-	public final double scaleMinAngle = 40;
+	
+	private Encoder liftEnc = new Encoder(RobotMap.liftEncPort1, RobotMap.liftEncPort2, RobotMap.liftEncInverted, Encoder.EncodingType.k4X);
+	private final double sprocketRatio = 1/1;
+	private final double gearboxRatio = 1/40; //TODO check for actual ratio
+	private final double motorRevsPerPulse = 1/4; //TODO look up (or measure) actual revs per pulse
 	
     private static final double p = 0;
     private static final double i = 0;
@@ -31,23 +31,19 @@ public class Lifter extends PIDSubsystem {
     private static final double pidPeriod = 0.005;
     public Lifter() {
     	super("lifter", p, i, d, feedForward, pidPeriod);
+    	liftEnc.setDistancePerPulse(motorRevsPerPulse * gearboxRatio * sprocketRatio * 360 /*degrees per revolution*/);
     	setInputRange(0, 360);
     	setOutputRange(0, 1);
-        // Use these to get going:
-        // setSetpoint() -  Sets where the PID controller should move the system
-        //                  to
-        // enable() - Enables the PID controller.
     }
     
     public void initDefaultCommand() {
-        setDefaultCommand(new TeleLift(this, OI.cubeJoy, OI.leftY));
     }
     
     protected double returnPIDInput() {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return 0.0;
+        return liftEnc.getDistance();
     }
     
     protected void usePIDOutput(double output) {
