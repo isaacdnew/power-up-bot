@@ -8,6 +8,7 @@
 package org.usfirst.frc.team6300.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
@@ -32,7 +33,16 @@ public class TeleDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		drivetrain.teleDrive(OI.driveJoy, OI.leftY, OI.rightX);
+		double forwardSpeed = OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY), 0.2);
+		double rotateSpeed = OI.deadZone(OI.cubeJoy.getRawAxis(OI.rightX) / (1 + Math.abs(forwardSpeed / 2)), 0.2);
+		
+		SmartDashboard.putNumber("forwardSpeed", forwardSpeed);
+		SmartDashboard.putNumber("rotateSpeed", rotateSpeed);
+		
+		double leftSpeed  = forwardSpeed + rotateSpeed;
+		double rightSpeed = forwardSpeed - rotateSpeed;
+		
+		drivetrain.setSpeeds(leftSpeed, rightSpeed);
 		//drivetrain.updateGear();
 		drivetrain.putEncoderData();
 	}

@@ -122,16 +122,7 @@ public class Drivetrain extends PIDSubsystem {
 	}
 	
 	public void teleDrive(Joystick joy, int forwardAxis, int rotateAxis) {
-		//save joystick axis values, adding deadzones, from 0 to 1
-		double forwardSpeed = OI.deadZone(-joy.getRawAxis(forwardAxis), 0.2);
-		double rotateSpeed = OI.deadZone(joy.getRawAxis(rotateAxis) / 2, 0.2);
 		
-		SmartDashboard.putNumber("forwardSpeed", forwardSpeed);
-		SmartDashboard.putNumber("rotateSpeed", rotateSpeed);
-		
-		//calculate desired motor speeds from 0 to 1
-		leftSpeed  = forwardSpeed + rotateSpeed;
-		rightSpeed = forwardSpeed - rotateSpeed;
 		setSpeeds(leftSpeed, rightSpeed);
 	}
 	
