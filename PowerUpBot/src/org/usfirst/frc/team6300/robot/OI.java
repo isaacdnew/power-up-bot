@@ -42,20 +42,51 @@ public class OI {
 	private final JoystickButton driveLTrig = new JoystickButton(driveJoy, lTrigBtn);
 	
 	public static final Joystick cubeJoy = new Joystick(1);
-	private final JoystickButton cubeA = new JoystickButton(cubeJoy, a);
-	private final JoystickButton cubeB = new JoystickButton(cubeJoy, b);
-	private final JoystickButton cubeX = new JoystickButton(cubeJoy, x);
+//	private final JoystickButton cubeA = new JoystickButton(cubeJoy, a);
+//	private final JoystickButton cubeB = new JoystickButton(cubeJoy, b);
+//	private final JoystickButton cubeX = new JoystickButton(cubeJoy, x);
 //	private final JoystickButton cubeY = new JoystickButton(cubeJoy, y);
-//	private final JoystickButton cubeRTrig = new JoystickButton(cubeJoy, rTrigBtn);
-//	private final JoystickButton cubeLTrig = new JoystickButton(cubeJoy, lTrigBtn);
+	private final JoystickButton cubeRTrig = new JoystickButton(cubeJoy, rTrigBtn);
+	private final JoystickButton cubeLTrig = new JoystickButton(cubeJoy, lTrigBtn);
 	
 	public OI(Robot robot) {
-//		driveRTrig.whenPressed(new ShiftUp(robot.drivetrain));
-//		driveLTrig.whenPressed(new ShiftDown(robot.drivetrain));
+		driveLTrig.whenPressed(new ShiftUp(robot.drivetrain));
+		driveRTrig.whenPressed(new ShiftDown(robot.drivetrain));
 		
 //		cubeA.whenPressed(new LiftArmTo("floor"));
 //		cubeB.whenPressed(new LiftArmTo("switch"));
 //		cubeY.whenPressed(new LiftArmTo("scale"));
-//		cubeRTrig.whenPressed(new CloseClaw(robot.claw));
+		
+		cubeLTrig.whenPressed(new OpenClaw(robot.claw));
+		cubeRTrig.whenPressed(new CloseClaw(robot.claw));
+	}
+	
+	/**
+	 * Adds a deadzone to, for example, a joystick input that does not completely zero itself mechanically.
+	 * @param input the input value (any double between -1 and 1, inclusively).
+	 * @param radius how far from zero the input can be for the output to still be zero. This must be greated than 0 and less than 1.
+	 * @return the value after application of the deadzone (between -1 and 1, inclusively).
+	 */
+	public static double deadZone(double input, double radius) {
+		double output;
+		double maxOutput = 1;
+		if (radius > maxOutput) {
+			output = 0;
+		}
+		else {
+			if (input > radius) {
+				output = ((maxOutput * (input - maxOutput)) / (maxOutput - radius)) + maxOutput;
+			}
+			else if (input < -radius) {
+				output = ((maxOutput * (input + maxOutput)) / (maxOutput - radius)) - maxOutput;
+			}
+			else {
+				output = 0;
+			}
+		}
+		if (Math.abs(output) > maxOutput) {
+			output = maxOutput;
+		}
+		return output;
 	}
 }

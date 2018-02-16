@@ -12,13 +12,15 @@ import edu.wpi.first.wpilibj.command.Command;
 public class HoldWrist extends Command {
 	private Wrist wrist;
 	private Lifter lifter;
-	private double angleWRTGround = 0;
-	private double requiredWristAngle;
-	private double lifterAngle;
+	private double desiredAngle = 0;
 	
-    public HoldWrist(Wrist wrist, Lifter lifter) {
+	/**
+     * Keeps the lifter arm within bounds, while also keeping it as close as possible to its desired angle with respect to the ground.
+     */
+    public HoldWrist(Wrist wrist, Lifter lifter, int desiredAngle) {
         this.wrist = wrist;
         this.lifter = lifter;
+        this.desiredAngle = desiredAngle;
         requires(wrist);
     }
 
@@ -29,7 +31,23 @@ public class HoldWrist extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	wrist.holdToAngleIfLegal(0, lifter);
+    	desiredAngle -= 360 * Math.floor(desiredAngle / 360);
+    	double lifterAngle = lifter.getPosition();
+    	double angleWRTGround;
+    	if (Math.cos(desiredAngle) <= (RobotMap.armLengthInches * (1 - Math.cos(lifterAngle))) / RobotMap.wristLengthInches) {
+    		//then it's legal.
+    		angleWRTGround = desiredAngle;
+    	}
+    	else if (desiredAngle >= 180) {
+    		//then it's illegal, below the lifter arm.
+    		angleWRTGround = 360 - Math.acos((RobotMap.armLengthInches * (1 - Math.cos(lifterAngle))) / RobotMap.wristLengthInches);
+    	}
+    	else {
+    		//then it's illegal, above the lifter arm.
+    		angleWRTGround = Math.acos((RobotMap.armLengthInches * (1 - Math.cos(lifterAngle))) / RobotMap.wristLengthInches);
+    	}
+    	double requiredWristAngle = lifterAngle + 180 - angleWRTGround;
+    	wrist.setSetpoint(requiredWristAngle);
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -21,7 +21,12 @@ public class TeleWrist extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	wrist.setSetpointRelative(OI.cubeJoy.getRawAxis(OI.rightY));
+    	if (wrist.getPIDController().isEnabled()) {
+    		wrist.setSetpointRelative(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY), 0.2));
+    	}
+    	else {
+    		wrist.setOutput(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY), 0.2));
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -7,7 +7,7 @@
 
 package org.usfirst.frc.team6300.robot.subsystems;
 
-import org.usfirst.frc.team6300.robot.Robot;
+import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 
@@ -57,8 +57,8 @@ public class Drivetrain extends PIDSubsystem {
 		super("drivetrain", p, i, d, feedForward, pidPeriod);
 		gyro = new ADXRS450_Gyro();
 		getPIDController().setAbsoluteTolerance(3);
-		getPIDController().setContinuous(true);
 		getPIDController().setInputRange(0, 360);
+		getPIDController().setContinuous(true);
 		getPIDController().setOutputRange(-1, 1);
 		
 		lfMotor.setInverted(RobotMap.lfInverted);
@@ -66,10 +66,11 @@ public class Drivetrain extends PIDSubsystem {
 		rfMotor.setInverted(RobotMap.rfInverted);
 		rbMotor.setInverted(RobotMap.rbInverted);
 		
+		lEncoder.setDistancePerPulse(pulseDistLowGear);
+		rEncoder.setDistancePerPulse(pulseDistLowGear);
+		
 		lEncoder.reset();
 		rEncoder.reset();
-		rEncoder.setDistancePerPulse(pulseDistLowGear);
-		lEncoder.setDistancePerPulse(pulseDistLowGear);
 		shiftDown();
 	}
 	
@@ -80,8 +81,7 @@ public class Drivetrain extends PIDSubsystem {
 	//PID CONTROL
 	@Override
 	protected double returnPIDInput() {
-		double angle = gyro.getAngle();
-		return angle - (360 * Math.floor(angle / 360));
+		return gyro.getAngle() - (360 * Math.floor(gyro.getAngle() / 360));
 	}
 
 	@Override
@@ -123,8 +123,8 @@ public class Drivetrain extends PIDSubsystem {
 	
 	public void teleDrive(Joystick joy, int forwardAxis, int rotateAxis) {
 		//save joystick axis values, adding deadzones, from 0 to 1
-		double forwardSpeed = Robot.deadZone(-joy.getRawAxis(forwardAxis), 0.2);
-		double rotateSpeed = Robot.deadZone(joy.getRawAxis(rotateAxis) / 2, 0.2);
+		double forwardSpeed = OI.deadZone(-joy.getRawAxis(forwardAxis), 0.2);
+		double rotateSpeed = OI.deadZone(joy.getRawAxis(rotateAxis) / 2, 0.2);
 		
 		SmartDashboard.putNumber("forwardSpeed", forwardSpeed);
 		SmartDashboard.putNumber("rotateSpeed", rotateSpeed);
@@ -132,11 +132,7 @@ public class Drivetrain extends PIDSubsystem {
 		//calculate desired motor speeds from 0 to 1
 		leftSpeed  = forwardSpeed + rotateSpeed;
 		rightSpeed = forwardSpeed - rotateSpeed;
-		
-		//set motor speeds if the PID controller isn't doing that already
-		if (!getPIDController().isEnabled()) {
-			setSpeeds(leftSpeed, rightSpeed);
-		}
+		setSpeeds(leftSpeed, rightSpeed);
 	}
 	
 	
@@ -170,8 +166,10 @@ public class Drivetrain extends PIDSubsystem {
 	public void putEncoderData() {
 		SmartDashboard.putNumber("Left Enc Count", lEncoder.get());
 		SmartDashboard.putNumber("Left Enc Dist", lEncoder.getDistance());
+		SmartDashboard.putNumber("Left Enc Rate", lEncoder.getRate());
 		SmartDashboard.putNumber("Right Enc Count", rEncoder.get());
 		SmartDashboard.putNumber("Right Enc Dist", rEncoder.getDistance());
+		SmartDashboard.putNumber("Right Enc Rate", rEncoder.getRate());
 	}
 	
 	

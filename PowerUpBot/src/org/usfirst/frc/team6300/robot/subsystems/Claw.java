@@ -9,28 +9,33 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Claw extends Subsystem {
-	private DoubleSolenoid sol = new DoubleSolenoid(RobotMap.clawSolPort1, RobotMap.clawSolPort2);
+	private DoubleSolenoid lClawSol = new DoubleSolenoid(RobotMap.lClawSolPort1, RobotMap.lClawSolPort2);
+	private DoubleSolenoid rClawSol = new DoubleSolenoid(RobotMap.rClawSolPort1, RobotMap.rClawSolPort2);
+	
     public Claw() {
     }
     
     public void close() {
-    	sol.set(DoubleSolenoid.Value.kReverse);
+    	lClawSol.set(DoubleSolenoid.Value.kReverse);
+    	rClawSol.set(DoubleSolenoid.Value.kReverse);
     }
     public void open() {
-    	sol.set(DoubleSolenoid.Value.kForward);
+    	lClawSol.set(DoubleSolenoid.Value.kForward);
+    	rClawSol.set(DoubleSolenoid.Value.kForward);
     }
     public void turnOff() {
-    	sol.set(DoubleSolenoid.Value.kOff);
+    	lClawSol.set(DoubleSolenoid.Value.kOff);
+    	rClawSol.set(DoubleSolenoid.Value.kOff);
     }
     
     public boolean isClosed() {
-    	return sol.get() == DoubleSolenoid.Value.kReverse;
+    	return lClawSol.get() == DoubleSolenoid.Value.kReverse;
     }
     public boolean isOpen() {
-    	return sol.get() == DoubleSolenoid.Value.kForward;
+    	return lClawSol.get() == DoubleSolenoid.Value.kForward;
     }
     public boolean isOff() {
-    	return sol.get() == DoubleSolenoid.Value.kOff;
+    	return lClawSol.get() == DoubleSolenoid.Value.kOff;
     }
     
     public void initDefaultCommand() {

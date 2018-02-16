@@ -1,8 +1,8 @@
 package org.usfirst.frc.team6300.robot.commands;
 
+import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.subsystems.Lifter;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -10,12 +10,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TeleLift extends Command {
 	private Lifter lifter;
-	private Joystick joy;
-	private int axis;
-    public TeleLift(Lifter lifter, Joystick joy, int axis) {
+    public TeleLift(Lifter lifter) {
         this.lifter = lifter;
-        this.joy = joy;
-        this.axis = axis;
         requires(lifter);
     }
 
@@ -25,7 +21,12 @@ public class TeleLift extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	lifter.setSetpointRelative(joy.getRawAxis(axis));
+    	if (lifter.getPIDController().isEnabled()) {
+    		lifter.setSetpointRelative(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.rightY), 0.2));
+    	}
+    	else {
+    		lifter.setMotors(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.rightY), 0.2));
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -1,22 +1,21 @@
 package org.usfirst.frc.team6300.robot.commands;
 
-import org.usfirst.frc.team6300.robot.subsystems.Claw;
-import org.usfirst.frc.team6300.robot.subsystems.Lifter;
+import org.usfirst.frc.team6300.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
 public class LiftArmTo extends Command {
-	private Lifter lifter;
-	private Claw claw;
+	private Robot robot;
 	private String position;
-	private double angle;
 	
-    public LiftArmTo(Lifter lifter, Claw claw, String position) {
-        this.lifter = lifter;
-        requires(lifter);
+    public LiftArmTo(Robot robot, String position) {
+    	this.robot = robot;
+        this.position = position;
+        requires(robot.lifter);
     }
 
     // Called just before this Command runs the first time
@@ -34,7 +33,45 @@ public class LiftArmTo extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	lifter.setSetpoint(angle);
+    	if (!robot.lifter.getPIDController().isEnabled()) {
+    		robot.lifter.enable();
+    	}
+    	switch (position) {
+    	case "scale": {
+    		robot.lifter.setSetpoint(robot.lifter.scaleMaxAngle);
+    		if (robot.lifter.getPosition() < 0) {
+    			robot.setClawHold(true);
+    		}
+    		else {
+    			robot.setClawHold(false);
+    		}
+    		break;
+    	}
+    	case "switch": {
+    		robot.lifter.setSetpoint(robot.lifter.switchAngle);
+    		if (robot.lifter.getPosition() > 0) {
+    			robot.setClawHold(true);
+    		}
+    		else {
+    			robot.setClawHold(false);
+    		}
+    		break;
+    	}
+    	case "floor": {
+    		robot.lifter.setSetpoint(robot.lifter.minAngle);
+    		if (robot.lifter.getPosition() > 0) {
+    			robot.setClawHold(true);
+    		}
+    		else {
+    			robot.setClawHold(false);
+    		}
+    		break;
+    	}
+    	}
+    	
+    	while (!robot.lifter.onTarget()) {
+    		Timer.delay(0.05);
+    	}
     }
 
     // Called when another command which requires one or more of the same

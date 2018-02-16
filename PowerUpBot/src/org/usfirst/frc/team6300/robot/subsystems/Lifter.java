@@ -1,28 +1,29 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
+import org.usfirst.frc.team6300.robot.commands.TeleLift;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 /**
  *
  */
 public class Lifter extends PIDSubsystem {
-	private final double startAngle = 14;
-	private final double minAngle = 6.52;
-    private final double switchAngle = 40;
-	private final double scaleMaxAngle = 160;
+	public final double startAngle = 14;
+	public final double minAngle = 6.52;
+    public final double switchAngle = 40;
+	public final double scaleMaxAngle = 160;
 	
-	private SpeedController lMotor = new Victor(RobotMap.lMotor);
-	private SpeedController rMotor = new Victor(RobotMap.rMotor);
+	private SpeedController lLiftMotor = new VictorSP(RobotMap.lLiftMotor);
+	private SpeedController rLiftMotor = new VictorSP(RobotMap.rLiftMotor);
 	
 	private Encoder liftEnc = new Encoder(RobotMap.liftEncPort1, RobotMap.liftEncPort2, RobotMap.liftEncInverted, Encoder.EncodingType.k4X);
 	private final double sprocketRatio = 1/1;
 	private final double gearboxRatio = 1/40; //TODO check for actual ratio
-	private final double motorRevsPerPulse = 1/4; //TODO look up (or measure) actual revs per pulse
+	private final double motorRevsPerPulse = 1/40; //TODO test this
 	
     private static final double p = 0;
     private static final double i = 0;
@@ -31,12 +32,15 @@ public class Lifter extends PIDSubsystem {
     private static final double pidPeriod = 0.005;
     public Lifter() {
     	super("lifter", p, i, d, feedForward, pidPeriod);
+    	lLiftMotor.setInverted(RobotMap.lLiftInverted);
+    	rLiftMotor.setInverted(RobotMap.rLiftInverted);
     	liftEnc.setDistancePerPulse(motorRevsPerPulse * gearboxRatio * sprocketRatio * 360 /*degrees per revolution*/);
     	setInputRange(0, 360);
     	setOutputRange(0, 1);
     }
     
     public void initDefaultCommand() {
+    	setDefaultCommand(new TeleLift(this));
     }
     
     protected double returnPIDInput() {
@@ -47,7 +51,11 @@ public class Lifter extends PIDSubsystem {
     }
     
     protected void usePIDOutput(double output) {
-       lMotor.set(output);
-       rMotor.set(output);
+       setMotors(output);
+    }
+    
+    public void setMotors(double power) {
+    	lLiftMotor.set(power);
+        rLiftMotor.set(power);
     }
 }
