@@ -7,14 +7,12 @@
 
 package org.usfirst.frc.team6300.robot.subsystems;
 
-import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.RobotMap;
 import org.usfirst.frc.team6300.robot.commands.TeleDrive;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -42,9 +40,8 @@ public class Drivetrain extends PIDSubsystem {
 	private final double lowGearRatio = 15/42;
 	private final double highGearRatio = 1; //TODO count gear teeth to measure ratio
 	private final double wheelDiameter = 6; //inches
-	private final double wheelCircumference = Math.PI * wheelDiameter; //inches
-	private final double pulseDistLowGear  = encRevsPerPulse * lowGearRatio  * wheelCircumference;
-	private final double pulseDistHighGear = encRevsPerPulse * highGearRatio * wheelCircumference;
+	private final double pulseDistLowGear  = encRevsPerPulse * lowGearRatio  * Math.PI * wheelDiameter;
+	private final double pulseDistHighGear = encRevsPerPulse * highGearRatio * Math.PI * wheelDiameter;
 	
 	Gyro gyro;
 	static final double p = 0.04;
@@ -93,7 +90,10 @@ public class Drivetrain extends PIDSubsystem {
 			leftOutput /= maxOutput;
 			rightOutput /= maxOutput;
 		}
-		setSpeeds(leftOutput, rightOutput);
+		lfMotor.set(leftOutput);
+		lbMotor.set(leftOutput);
+		rfMotor.set(rightOutput);
+		rbMotor.set(rightOutput);;
 	}
 	
 	
@@ -121,12 +121,6 @@ public class Drivetrain extends PIDSubsystem {
 		rbMotor.stopMotor();
 	}
 	
-	public void teleDrive(Joystick joy, int forwardAxis, int rotateAxis) {
-		
-		setSpeeds(leftSpeed, rightSpeed);
-	}
-	
-	
 	
 	
 	
@@ -136,6 +130,8 @@ public class Drivetrain extends PIDSubsystem {
 		rSol.set(DoubleSolenoid.Value.kReverse);
 		rEncoder.setDistancePerPulse(pulseDistHighGear);
 		lEncoder.setDistancePerPulse(pulseDistHighGear);
+		rEncoder.reset();
+		lEncoder.reset();
 	}
 	
 	public void shiftDown() {
@@ -143,6 +139,8 @@ public class Drivetrain extends PIDSubsystem {
 		rSol.set(DoubleSolenoid.Value.kForward);
 		rEncoder.setDistancePerPulse(pulseDistLowGear);
 		lEncoder.setDistancePerPulse(pulseDistLowGear);
+		rEncoder.reset();
+		lEncoder.reset();
 	}
 	
 	public void updateGear() {
