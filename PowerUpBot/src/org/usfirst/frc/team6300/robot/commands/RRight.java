@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class LLeft extends CommandGroup {
-	public LLeft(Robot robot) {
+public class RRight extends CommandGroup {
+	public RRight(Robot robot) {
 		// Calibrate Arms
 		addParallel(new CloseClaw(robot.claw));
 		addSequential(new LiftTo(robot, robot.lifter.startAngle));
@@ -17,7 +17,7 @@ public class LLeft extends CommandGroup {
 		addParallel(new LiftTo(robot, robot.lifter.switchAngle));
 
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
-		addSequential(new Rotate(robot.drivetrain, 90));
+		addSequential(new Rotate(robot.drivetrain, -90));
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
 
 		addSequential(new OpenClaw(robot.claw));

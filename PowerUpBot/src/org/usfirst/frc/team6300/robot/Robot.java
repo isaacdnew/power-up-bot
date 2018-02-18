@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
 				// autonomousCommand = new RLeft(drivetrain, lifter, claw);
 				break;
 			case "right":
-				// autonomousCommand = new RRight(drivetrain, lifter, claw);
+				autonomousCommand = new RRight(drivetrain, lifter, claw);
 				break;
 			case "center":
 				// autonomousCommand = new RCenter(drivetrain, lifter, claw);
