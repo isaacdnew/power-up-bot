@@ -28,9 +28,22 @@ public class TeleLiftPID extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
+    	if (lifter.minVertAngle < lifter.getPosition() && lifter.getPosition() <= lifter.topIllegalAngle) {
+    		wrist.setSetpoint(wristWRTGround(-90));
+    	}
+    	else if (lifter.getPosition() <= lifter.minVertAngle) {
+    		wrist.setSetpoint(160);
+    	}
+    	else if (lifter.topIllegalAngle > lifter.getPosition()) {
+    		wrist.setSetpoint(0);
+    	}
+    	lifter.setMotor(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.rightY)));
     }
-
+    
+    private double wristWRTGround(double angle) {
+    	return angle - lifter.getPosition();
+    }
+    
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return false;

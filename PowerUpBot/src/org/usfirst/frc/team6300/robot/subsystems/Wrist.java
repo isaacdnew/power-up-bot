@@ -1,49 +1,71 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.TeleWrist;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 /**
  *
  */
 public class Wrist extends PIDSubsystem {
-	private SpeedController wristMotor = new Victor(RobotMap.wristMotor);
-	private Encoder wristEnc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+	private SpeedController motor = new VictorSP(RobotMap.wristMotor);
+	private Encoder enc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+	private double encRevsPerPulse = 1.0 / 40;
+	private double stage1Ratio = 1.0 / 10;
+	private double stage2Ratio = 1.0 / 5;
+	private double beltRatio = 24.0 / 36;
+	private double encOffset = 0;
 	
-    private static final double p = 0;
-    private static final double i = 0;
-    private static final double d = 0;
-    private static final double feedForward = 0;
-    private static final double pidPeriod = 0.005;
-    
-    public Wrist() {
-    	super("wrist", p, i, d, feedForward, pidPeriod);
-    	setInputRange(0, 360);
-    	setOutputRange(0, 1);
-    	
-    	wristEnc.setDistancePerPulse(1);
-    }
-    
-    public void initDefaultCommand() {
-        setDefaultCommand(new TeleWrist(this));
-    }
-    
-    protected double returnPIDInput() {
-        // Return your input value for the PID loop
-        // e.g. a sensor, like a potentiometer:
-        // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return wristEnc.get();
-    }
-    
-    protected void usePIDOutput(double output) {
-    	wristMotor.set(output);
-    }
-    
-    public void setOutput(double output) {
-    	wristMotor.set(output);
-    }
+	public final double foldedAngle = 160;
+
+	private static final double p = 0.02;
+	private static final double i = 0.0;
+	private static final double d = 0.0;
+	private static final double feedForward = 0.0;
+	private static final double pidPeriod = 0.005;
+
+	public Wrist() {
+		super("wrist", p, i, d, feedForward, pidPeriod);
+		setInputRange(0.0, 360.0);
+		getPIDController().setContinuous(false);
+		setOutputRange(0.0, 1.0);
+
+		enc.setDistancePerPulse(encRevsPerPulse * stage1Ratio * stage2Ratio * beltRatio * 360.0 /* degrees */);
+	}
+
+	public void initDefaultCommand() {
+	}
+
+	protected double returnPIDInput() {
+		return getTrueAngle();
+	}
+
+	private double getTrueAngle() {
+		return enc.getDistance() + encOffset;
+	}
+
+	public void setEncOffset(double offset) {
+		encOffset = offset;
+	}
+
+	protected void usePIDOutput(double output) {
+		motor.set(output);
+	}
+
+	public void setMotor(double output) {
+		if (!getPIDController().isEnabled()) {
+			motor.set(output);
+		} else {
+			System.out.println("Wrist PID enabled; not setting motor.");
+		}
+	}
+
+	public void reset() {
+		disable();
+		enc.reset();
+		setSetpoint(0.0);
+		enable();
+	}
 }

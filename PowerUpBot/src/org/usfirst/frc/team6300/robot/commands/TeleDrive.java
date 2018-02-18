@@ -14,11 +14,11 @@ import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.subsystems.Drivetrain;
 
 /**
- * An example command.  You can replace me with your own command.
+ * An example command. You can replace me with your own command.
  */
 public class TeleDrive extends Command {
 	private Drivetrain drivetrain;
-	
+
 	public TeleDrive(Drivetrain drivetrain) {
 		this.drivetrain = drivetrain;
 		requires(drivetrain);
@@ -33,17 +33,17 @@ public class TeleDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		double forwardSpeed = OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY), 0.2);
-		double rotateSpeed = OI.deadZone(OI.cubeJoy.getRawAxis(OI.rightX) / (1 + Math.abs(forwardSpeed / 2)), 0.2);
-		
+		double forwardSpeed = OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY));
+		double rotateSpeed = OI.deadZone(OI.cubeJoy.getRawAxis(OI.rightX) / (1 + Math.abs(forwardSpeed / 2)));
+
 		SmartDashboard.putNumber("forwardSpeed", forwardSpeed);
 		SmartDashboard.putNumber("rotateSpeed", rotateSpeed);
-		
-		double leftSpeed  = forwardSpeed + rotateSpeed;
+
+		double leftSpeed = forwardSpeed + rotateSpeed;
 		double rightSpeed = forwardSpeed - rotateSpeed;
-		
+
 		drivetrain.setSpeeds(leftSpeed, rightSpeed);
-		//drivetrain.updateGear();
+		// drivetrain.updateGear();
 		drivetrain.putEncoderData();
 	}
 
@@ -63,5 +63,6 @@ public class TeleDrive extends Command {
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
+		end();
 	}
 }

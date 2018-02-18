@@ -27,48 +27,39 @@ import org.usfirst.frc.team6300.robot.subsystems.*;
  */
 public class Robot extends TimedRobot {
 	private Compressor compressor = new Compressor();
-	
-	//Subsystems
+
+	// Subsystems
 	public final Drivetrain drivetrain = new Drivetrain();
 	public final Lifter lifter = new Lifter();
 	public final Claw claw = new Claw();
 	public final Wrist wrist = new Wrist();
-	
+
 	public OI oi;
 
 	Command autonomousCommand;
 	SendableChooser<String> sideChooser = new SendableChooser<>();
-	
-	private boolean clawHold = false;
-	
+
 	/**
-	 * This method is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This method is run when the robot is first started up and should be used for
+	 * any initialization code.
 	 */
 	@Override
 	public void robotInit() {
 		oi = new OI(this);
-		
+
 		sideChooser.addDefault("Starting from Left", "left");
 		sideChooser.addObject("Starting from Center", "center");
 		sideChooser.addObject("Starting from Right", "right");
 		SmartDashboard.putData("Starting Side", sideChooser);
-		
+
 		compressor.start();
+		drivetrain.calibrateGyro();
 	}
-	
-	public void setClawHold(boolean clawHold) {
-		this.clawHold = clawHold;
-	}
-	
-	public boolean getClawHold() {
-		return clawHold;
-	}
-	
+
 	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
+	 * This function is called once each time the robot enters Disabled mode. You
+	 * can use it to reset any subsystem information you want to clear when the
+	 * robot is disabled.
 	 */
 	@Override
 	public void disabledInit() {
@@ -80,7 +71,8 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * Chooses an autonomous command based on data from the FMS and the user, and then starts the command.
+	 * Chooses an autonomous command based on data from the FMS and the user, and
+	 * then starts the command.
 	 */
 	@Override
 	public void autonomousInit() {
@@ -92,40 +84,37 @@ public class Robot extends TimedRobot {
 				autonomousCommand = new LLeft(this);
 				break;
 			case "right":
-//				autonomousCommand = new LRight(drivetrain, lifter, claw);
+				// autonomousCommand = new LRight(drivetrain, lifter, claw);
 				break;
 			case "center":
-//				autonomousCommand = new LCenter(drivetrain, lifter, claw);
+				// autonomousCommand = new LCenter(drivetrain, lifter, claw);
 				break;
 			default:
 				System.out.println("Invalid starting side string!");
 				break;
 			}
-		}	
-		else if (gameData.charAt(0) == 'R'){
+		} else if (gameData.charAt(0) == 'R') {
 			switch (startingSide) {
 			case "left":
-//				autonomousCommand = new RLeft(drivetrain, lifter, claw);
+				// autonomousCommand = new RLeft(drivetrain, lifter, claw);
 				break;
 			case "right":
-//				autonomousCommand = new RRight(drivetrain, lifter, claw);
+				// autonomousCommand = new RRight(drivetrain, lifter, claw);
 				break;
 			case "center":
-//				autonomousCommand = new RCenter(drivetrain, lifter, claw);
+				// autonomousCommand = new RCenter(drivetrain, lifter, claw);
 				break;
 			default:
 				System.out.println("Invalid starting side string!");
 				break;
 			}
-		}
-		else {
+		} else {
 			System.out.println("Invalid game data!");
 		}
 		// schedule the autonomous command
 		if (autonomousCommand != null) {
 			autonomousCommand.start();
-		}
-		else {
+		} else {
 			System.out.println("autonomousCommand is null! Running auto line code.");
 			autonomousCommand = new AutoDrive(drivetrain, 0.5, 1.0);
 			autonomousCommand.start();
