@@ -36,7 +36,7 @@ public class RobotMap {
 	public static final boolean rfInverted = true;
 	public static final boolean rbInverted = true;
 	
-	public static final boolean lLiftInverted = false;
+	public static final boolean liftInverted = false;
 	public static final boolean rLiftInverted = true;
 	
 	public static final boolean wristInverted = false; //TODO check this

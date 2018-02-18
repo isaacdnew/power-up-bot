@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class LiftArmTo extends Command {
+public class LiftTo extends Command {
 	private Robot robot;
 	private String position;
 	
-    public LiftArmTo(Robot robot, String position) {
+    public LiftTo(Robot robot, String position) {
     	this.robot = robot;
         this.position = position;
         requires(robot.lifter);
@@ -33,9 +33,12 @@ public class LiftArmTo extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	if (!robot.lifter.getPIDController().isEnabled()) {
-    		robot.lifter.enable();
-    	}
+//    	if (!robot.lifter.getPIDController().isEnabled()) {
+//    		robot.lifter.enable();
+//    	}
+//    	
+//    	TODO add option for limit switch functionality
+//    	
     	switch (position) {
     	case "scale": {
     		robot.lifter.setSetpoint(robot.lifter.scaleMaxAngle);
@@ -66,6 +69,9 @@ public class LiftArmTo extends Command {
     			robot.setClawHold(false);
     		}
     		break;
+    	}
+    	default: {
+    		System.out.println("Invalid lifter position string!");
     	}
     	}
     	

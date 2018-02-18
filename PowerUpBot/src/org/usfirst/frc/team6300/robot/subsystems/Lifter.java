@@ -1,12 +1,12 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import org.usfirst.frc.team6300.robot.RobotMap;
-import org.usfirst.frc.team6300.robot.commands.TeleLift;
 
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 /**
  *
@@ -17,13 +17,11 @@ public class Lifter extends PIDSubsystem {
     public final double switchAngle = 40;
 	public final double scaleMaxAngle = 160;
 	
-	private SpeedController lLiftMotor = new VictorSP(RobotMap.lLiftMotor);
-	private SpeedController rLiftMotor = new VictorSP(RobotMap.rLiftMotor);
+	private SpeedController liftMotor = new VictorSP(RobotMap.lLiftMotor);
 	
-	private Encoder liftEnc = new Encoder(RobotMap.liftEncPort1, RobotMap.liftEncPort2, RobotMap.liftEncInverted, Encoder.EncodingType.k4X);
-	private final double sprocketRatio = 1/1;
-	private final double gearboxRatio = 1/40; //TODO check for actual ratio
-	private final double motorRevsPerPulse = 1/40; //TODO test this
+	private final double actuatorRange = 10;
+	private final double potOffset = 0;
+	private Potentiometer liftPot = new AnalogPotentiometer(0, actuatorRange, potOffset);
 	
     private static final double p = 0;
     private static final double i = 0;
@@ -32,30 +30,25 @@ public class Lifter extends PIDSubsystem {
     private static final double pidPeriod = 0.005;
     public Lifter() {
     	super("lifter", p, i, d, feedForward, pidPeriod);
-    	lLiftMotor.setInverted(RobotMap.lLiftInverted);
-    	rLiftMotor.setInverted(RobotMap.rLiftInverted);
-    	liftEnc.setDistancePerPulse(motorRevsPerPulse * gearboxRatio * sprocketRatio * 360 /*degrees per revolution*/);
-    	setInputRange(0, 360);
+    	liftMotor.setInverted(RobotMap.liftInverted);
+    	
+    	setInputRange(0, 10);
+    	getPIDController().setContinuous(false);
     	setOutputRange(0, 1);
     }
     
     public void initDefaultCommand() {
-    	setDefaultCommand(new TeleLift(this));
     }
     
     protected double returnPIDInput() {
-        // Return your input value for the PID loop
-        // e.g. a sensor, like a potentiometer:
-        // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return liftEnc.getDistance();
+        return liftPot.pidGet();
     }
     
     protected void usePIDOutput(double output) {
-       setMotors(output);
+       setMotor(output);
     }
     
-    public void setMotors(double power) {
-    	lLiftMotor.set(power);
-        rLiftMotor.set(power);
+    public void setMotor(double power) {
+    	liftMotor.set(power);
     }
 }

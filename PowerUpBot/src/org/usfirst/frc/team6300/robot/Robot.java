@@ -27,10 +27,13 @@ import org.usfirst.frc.team6300.robot.subsystems.*;
  */
 public class Robot extends TimedRobot {
 	private Compressor compressor = new Compressor();
+	
+	//Subsystems
 	public final Drivetrain drivetrain = new Drivetrain();
 	public final Lifter lifter = new Lifter();
 	public final Claw claw = new Claw();
-	//public final Wrist wrist = new Wrist();
+	public final Wrist wrist = new Wrist();
+	
 	public OI oi;
 
 	Command autonomousCommand;
@@ -38,16 +41,8 @@ public class Robot extends TimedRobot {
 	
 	private boolean clawHold = false;
 	
-	public void setClawHold(boolean clawHold) {
-		this.clawHold = clawHold;
-	}
-	
-	public boolean getClawHold() {
-		return clawHold;
-	}
-	
 	/**
-	 * This function is run when the robot is first started up and should be
+	 * This method is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
@@ -61,7 +56,15 @@ public class Robot extends TimedRobot {
 		
 		compressor.start();
 	}
-
+	
+	public void setClawHold(boolean clawHold) {
+		this.clawHold = clawHold;
+	}
+	
+	public boolean getClawHold() {
+		return clawHold;
+	}
+	
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
 	 * You can use it to reset any subsystem information you want to clear when
@@ -77,15 +80,7 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
-	 *
-	 * <p>You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
+	 * Chooses an autonomous command based on data from the FMS and the user, and then starts the command.
 	 */
 	@Override
 	public void autonomousInit() {
@@ -94,7 +89,7 @@ public class Robot extends TimedRobot {
 		if (gameData.charAt(0) == 'L') {
 			switch (startingSide) {
 			case "left":
-//				autonomousCommand = new LLeft(this);
+				autonomousCommand = new LLeft(this);
 				break;
 			case "right":
 //				autonomousCommand = new LRight(drivetrain, lifter, claw);
@@ -132,7 +127,7 @@ public class Robot extends TimedRobot {
 		}
 		else {
 			System.out.println("autonomousCommand is null! Running auto line code.");
-			autonomousCommand = new AutoLine(drivetrain);
+			autonomousCommand = new AutoDrive(drivetrain, 0.5, 1.0);
 			autonomousCommand.start();
 		}
 	}
@@ -147,10 +142,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}

@@ -75,7 +75,7 @@ public class Drivetrain extends PIDSubsystem {
 	
 	
 	
-	//PID CONTROL
+	//HEADING CONTROL
 	@Override
 	protected double returnPIDInput() {
 		return gyro.getAngle() - (360 * Math.floor(gyro.getAngle() / 360));
@@ -94,6 +94,10 @@ public class Drivetrain extends PIDSubsystem {
 		lbMotor.set(leftOutput);
 		rfMotor.set(rightOutput);
 		rbMotor.set(rightOutput);;
+	}
+	
+	public void calibrateGyro() {
+		gyro.calibrate();
 	}
 	
 	
