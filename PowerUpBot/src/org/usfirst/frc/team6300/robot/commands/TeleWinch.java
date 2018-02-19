@@ -25,7 +25,8 @@ public class TeleWinch extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (Timer.getMatchTime() < 45) {
-			winch.setMotor(OI.deadZone(OI.cubeJoy.getRawAxis(OI.lTrigAxis)));
+			winch.setMotor(OI.deadZone(OI.cubeJoy.getRawAxis(OI.rTrigAxis))
+					- OI.deadZone(OI.cubeJoy.getRawAxis(OI.lTrigAxis)));
 		} else {
 			winch.setMotor(0);
 		}
@@ -38,10 +39,12 @@ public class TeleWinch extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
+		winch.setMotor(0);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
+		end();
 	}
 }
