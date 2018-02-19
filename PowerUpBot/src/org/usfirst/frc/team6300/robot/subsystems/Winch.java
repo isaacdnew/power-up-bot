@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Winch extends Subsystem {
-	private SpeedController motor = new VictorSP(RobotMap.lLiftMotor);
+	private SpeedController motor = new VictorSP(RobotMap.winchMotor);
 
 	public Winch() {
-		motor.setInverted(RobotMap.liftInverted);
+		motor.setInverted(RobotMap.winchInverted);
 	}
 
 	public void initDefaultCommand() {
