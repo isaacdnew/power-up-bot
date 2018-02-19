@@ -12,13 +12,12 @@ public class LLeft extends CommandGroup {
 		// Hold onto the cube
 		addParallel(new CloseClaw(robot.claw));
 
-		// Calibrate arms
+		// Set up arms
 		addSequential(new LiftTo(robot, robot.lifter.startAngle));
 		addSequential(new CalibrateWrist(robot.wrist));
-
-		// Drive to switch
 		addParallel(new LiftTo(robot, robot.lifter.switchAngle));
 
+		// Drive to switch
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
 		addSequential(new Rotate(robot.drivetrain, 90));
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
