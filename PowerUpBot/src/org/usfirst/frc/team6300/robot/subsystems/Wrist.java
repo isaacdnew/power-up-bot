@@ -16,8 +16,8 @@ public class Wrist extends PIDSubsystem {
 	private double stage1Ratio = 1.0 / 10;
 	private double stage2Ratio = 1.0 / 5;
 	private double beltRatio = 24.0 / 36;
-	private double encOffset = 0;
-	
+	private final double encOffset = 0;
+
 	public final double foldedAngle = 160;
 
 	private static final double p = 0.02;
@@ -31,8 +31,9 @@ public class Wrist extends PIDSubsystem {
 		setInputRange(0.0, 360.0);
 		getPIDController().setContinuous(false);
 		setOutputRange(0.0, 1.0);
-
+		
 		enc.setDistancePerPulse(encRevsPerPulse * stage1Ratio * stage2Ratio * beltRatio * 360.0 /* degrees */);
+		enc.setMinRate(2);
 	}
 
 	public void initDefaultCommand() {
@@ -42,16 +43,16 @@ public class Wrist extends PIDSubsystem {
 		return getTrueAngle();
 	}
 
+	protected void usePIDOutput(double output) {
+		motor.set(output);
+	}
+
 	private double getTrueAngle() {
 		return enc.getDistance() + encOffset;
 	}
 
-	public void setEncOffset(double offset) {
-		encOffset = offset;
-	}
-
-	protected void usePIDOutput(double output) {
-		motor.set(output);
+	public boolean getEncStopped() {
+		return enc.getStopped();
 	}
 
 	public void setMotor(double output) {

@@ -26,7 +26,7 @@ public class Lifter extends PIDSubsystem {
 	private final double potOffset = 0; // inches
 	private Potentiometer pot = new AnalogPotentiometer(0, actuatorRange, potOffset);
 
-	private static final double p = 0.1;
+	private static final double p = 0.05;
 	private static final double i = 0;
 	private static final double d = 0;
 	private static final double feedForward = 0;
