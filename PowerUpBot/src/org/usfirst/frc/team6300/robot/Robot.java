@@ -84,10 +84,10 @@ public class Robot extends TimedRobot {
 				autonomousCommand = new LLeft(this);
 				break;
 			case "right":
-				// autonomousCommand = new LRight(drivetrain, lifter, claw);
+				autonomousCommand = new LRight(this);
 				break;
 			case "center":
-				// autonomousCommand = new LCenter(drivetrain, lifter, claw);
+				// autonomousCommand = new LCenter(this);
 				break;
 			default:
 				System.out.println("Invalid starting side string!");
@@ -96,13 +96,13 @@ public class Robot extends TimedRobot {
 		} else if (gameData.charAt(0) == 'R') {
 			switch (startingSide) {
 			case "left":
-				// autonomousCommand = new RLeft(drivetrain, lifter, claw);
+				autonomousCommand = new RLeft(this);
 				break;
 			case "right":
 				autonomousCommand = new RRight(this);
 				break;
 			case "center":
-				// autonomousCommand = new RCenter(drivetrain, lifter, claw);
+				autonomousCommand = new RCenter(this);
 				break;
 			default:
 				System.out.println("Invalid starting side string!");

@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class RRight extends CommandGroup {
-	public RRight(Robot robot) {
+public class RLeft extends CommandGroup {
+	public RLeft(Robot robot) {
 		// Hold onto the cube
 		addParallel(new CloseClaw(robot.claw));
 
@@ -19,9 +19,11 @@ public class RRight extends CommandGroup {
 		// Drive to switch
 		addParallel(new LiftTo(robot, robot.lifter.switchAngle));
 
-		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
-		addSequential(new Rotate(robot.drivetrain, -90));
-		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
+		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.5));
+		addSequential(new Rotate(robot.drivetrain, 90));
+		addSequential(new AutoDrive(robot.drivetrain, 0.5, 5.0));
+		addSequential(new Rotate(robot.drivetrain, 90));
+		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.5));
 
 		// Drop cube on switch
 		addSequential(new OpenClaw(robot.claw));
