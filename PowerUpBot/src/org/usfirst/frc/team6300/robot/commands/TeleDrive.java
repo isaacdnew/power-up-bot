@@ -43,7 +43,13 @@ public class TeleDrive extends Command {
 		double rightSpeed = forwardSpeed - rotateSpeed;
 
 		drivetrain.setSpeeds(leftSpeed, rightSpeed);
-		// drivetrain.updateGear();
+
+		if (Math.abs(drivetrain.getForwardSpeed()) > 18 /* TODO check this number */) {
+			drivetrain.shiftUp();
+		} else {
+			drivetrain.shiftDown();
+		}
+
 		drivetrain.putEncoderData();
 	}
 
