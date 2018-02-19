@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
 				autonomousCommand = new RRight(this);
 				break;
 			case "center":
-				autonomousCommand = new RCenter(this);
+				//autonomousCommand = new RCenter(this);
 				break;
 			default:
 				System.out.println("Invalid starting side string!");
