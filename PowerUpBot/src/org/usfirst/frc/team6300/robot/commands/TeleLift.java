@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TeleLiftPID extends Command {
+public class TeleLift extends Command {
 	private Lifter lifter;
 	private Wrist wrist;
 	
-    public TeleLiftPID(Lifter lifter, Wrist wrist) {
+    public TeleLift(Lifter lifter, Wrist wrist) {
         this.lifter = lifter;
         this.wrist = wrist;
         requires(lifter);
@@ -22,7 +22,7 @@ public class TeleLiftPID extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	lifter.enable();
+    	lifter.disable();
     	wrist.enable();
     }
 
