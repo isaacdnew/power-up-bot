@@ -20,11 +20,11 @@ public class Lifter extends PIDSubsystem {
 	public final double scaleMaxAngle = 160;
 	public final double verticalAngle = 180;
 
-	private SpeedController liftMotor = new VictorSP(RobotMap.lLiftMotor);
+	private SpeedController motor = new VictorSP(RobotMap.liftMotor);
 
 	private final double actuatorRange = 12; // inches
 	private final double potOffset = 0; // inches
-	private Potentiometer pot = new AnalogPotentiometer(0, actuatorRange, potOffset);
+	private Potentiometer pot = new AnalogPotentiometer(RobotMap.liftPot, actuatorRange, potOffset);
 
 	private static final double p = 0.05;
 	private static final double i = 0;
@@ -34,7 +34,7 @@ public class Lifter extends PIDSubsystem {
 
 	public Lifter() {
 		super("lifter", p, i, d, feedForward, pidPeriod);
-		liftMotor.setInverted(RobotMap.liftInverted);
+		motor.setInverted(RobotMap.liftInverted);
 
 		setInputRange(0, actuatorRange);
 		getPIDController().setContinuous(false);
@@ -51,15 +51,15 @@ public class Lifter extends PIDSubsystem {
 
 	protected void usePIDOutput(double output) {
 		if (1 < getPosition() && getPosition() < actuatorRange - 1) {
-			liftMotor.set(output);
+			motor.set(output);
 		} else {
-			liftMotor.set(0);
+			motor.set(0);
 		}
 	}
 
 	public void setMotor(double power) {
 		if (!getPIDController().isEnabled()) {
-			liftMotor.set(power);
+			motor.set(power);
 		} else {
 			System.out.println("Lifter PID enabled; not setting motor.");
 		}
