@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The drivetrain. It drives the robot.
  */
 public class Drivetrain extends PIDSubsystem {
-
+	// Drive motors
 	private final SpeedController lfMotor = new VictorSP(RobotMap.lfMotor);
 	private final SpeedController lbMotor = new VictorSP(RobotMap.lbMotor);
 	private final SpeedController rfMotor = new VictorSP(RobotMap.rfMotor);
@@ -31,19 +31,23 @@ public class Drivetrain extends PIDSubsystem {
 	double leftSpeed = 0;
 	double rightSpeed = 0;
 
+	// Gearbox solenoids
 	private final DoubleSolenoid lSol = new DoubleSolenoid(RobotMap.lSolPort1, RobotMap.lSolPort2);
 	private final DoubleSolenoid rSol = new DoubleSolenoid(RobotMap.rSolPort1, RobotMap.rSolPort2);
 
+	// Encoders
 	private final Encoder lEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
 	private final Encoder rEncoder = new Encoder(2, 3, false, Encoder.EncodingType.k4X);
+
 	private final double encRevsPerPulse = 1.0 / 400;
 	private final double lowGearRatio = 15.0 / 42;
-	private final double highGearRatio = 1.0; // TODO count gear teeth to measure ratio
+	private final double highGearRatio = 1.0; // TODO count gear teeth to measure ratio, or don't bother
 	private final double wheelDiameter = 6.0; // inches
 	private final double pulseDistLowGear = encRevsPerPulse * lowGearRatio * Math.PI * wheelDiameter;
 	private final double pulseDistHighGear = encRevsPerPulse * highGearRatio * Math.PI * wheelDiameter;
 
-	Gyro gyro;
+	// Heading control TODO tune pid
+	Gyro gyro = new ADXRS450_Gyro();
 	static final double p = 0.04;
 	static final double i = 0.0002;
 	static final double d = 0.22;
@@ -52,7 +56,6 @@ public class Drivetrain extends PIDSubsystem {
 
 	public Drivetrain() {
 		super("drivetrain", p, i, d, feedForward, pidPeriod);
-		gyro = new ADXRS450_Gyro();
 		getPIDController().setAbsoluteTolerance(3);
 		getPIDController().setInputRange(0, 360);
 		getPIDController().setContinuous(true);
@@ -63,11 +66,6 @@ public class Drivetrain extends PIDSubsystem {
 		rfMotor.setInverted(RobotMap.rfInverted);
 		rbMotor.setInverted(RobotMap.rbInverted);
 
-		lEncoder.setDistancePerPulse(pulseDistLowGear);
-		rEncoder.setDistancePerPulse(pulseDistLowGear);
-
-		lEncoder.reset();
-		rEncoder.reset();
 		shiftDown();
 	}
 
@@ -90,7 +88,6 @@ public class Drivetrain extends PIDSubsystem {
 		lbMotor.set(leftOutput);
 		rfMotor.set(rightOutput);
 		rbMotor.set(rightOutput);
-		;
 	}
 
 	public void calibrateGyro() {
@@ -140,14 +137,9 @@ public class Drivetrain extends PIDSubsystem {
 		lEncoder.reset();
 	}
 
-	public void updateGear() {
-		if (Math.abs((lEncoder.getRate() + rEncoder.getRate()) / 2) > 18) {
-			shiftUp();
-		} else {
-			shiftDown();
-		}
+	public double getForwardSpeed() {
+		return (lEncoder.getRate() + rEncoder.getRate()) / 2;
 	}
-
 	public void putEncoderData() {
 		SmartDashboard.putNumber("Left Enc Count", lEncoder.get());
 		SmartDashboard.putNumber("Left Enc Dist", lEncoder.getDistance());
