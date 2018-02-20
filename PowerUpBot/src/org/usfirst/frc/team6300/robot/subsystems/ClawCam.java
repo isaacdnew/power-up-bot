@@ -1,6 +1,9 @@
 package org.usfirst.frc.team6300.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import org.usfirst.frc.team6300.robot.ClawCamPipeline;
+
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -41,7 +44,7 @@ public class ClawCam extends Subsystem {
 		startRecording();
 		CvSource outputStream = CameraServer.getInstance().putVideo("ShooterCam", imgWidth, imgHeight);
 		visionThread = new VisionThread(clawCam, new ClawCamPipeline(), pipeline -> {
-			outputStream.putFrame(pipeline.cvFlipOutput());
+			outputStream.putFrame(pipeline.blurOutput());
 		});
 		visionThread.start();
 	}
