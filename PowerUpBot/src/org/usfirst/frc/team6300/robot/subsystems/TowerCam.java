@@ -2,7 +2,7 @@ package org.usfirst.frc.team6300.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-import org.usfirst.frc.team6300.robot.ClawCamPipeline;
+import org.usfirst.frc.team6300.robot.TowerCamPipeline;
 
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
@@ -39,7 +39,7 @@ public class TowerCam extends Subsystem {
 	public void startProcessing() {
 		startRecording();
 		CvSource outputStream = CameraServer.getInstance().putVideo("TowerCam", imgWidth, imgHeight);
-		visionThread = new VisionThread(clawCam, new ClawCamPipeline(), pipeline -> {
+		visionThread = new VisionThread(clawCam, new TowerCamPipeline(), pipeline -> {
 			outputStream.putFrame(pipeline.blurOutput());
 		});
 		visionThread.start();
