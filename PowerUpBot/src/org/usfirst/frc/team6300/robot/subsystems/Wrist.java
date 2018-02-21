@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Wrist extends PIDSubsystem {
 	private SpeedController motor = new VictorSP(RobotMap.wristMotor);
 	private Encoder enc = new Encoder(RobotMap.wristEncPort1, RobotMap.wristEncPort2, false, Encoder.EncodingType.k4X);
-	private double encRevsPerPulse = 1.0 / 40;
 	private final double encOffset = 411;
 
 	public final double foldedAngle = 160;
@@ -30,7 +29,7 @@ public class Wrist extends PIDSubsystem {
 		getPIDController().setContinuous(false);
 		setOutputRange(0.0, 1.0);
 
-		enc.setDistancePerPulse(90.0 / 215); // 215 steps = 90 degrees on this encoder and gearing setup
+		enc.setDistancePerPulse(90.0 / 215); // 215 steps = 90 degrees on this encoder and gearing setup TODO no longer true with chain drive
 		enc.setDistancePerPulse(1);
 		enc.setMinRate(2);
 	}
