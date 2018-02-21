@@ -33,7 +33,10 @@ public class Robot extends TimedRobot {
 	public final Lifter lifter = new Lifter();
 	public final Claw claw = new Claw();
 	public final Wrist wrist = new Wrist();
-
+	public final Winch winch = new Winch();
+	private final ClawCam gearCam = new ClawCam(1);
+	private final TowerCam towerCam = new TowerCam(0);
+	
 	public OI oi;
 
 	Command autonomousCommand;
@@ -53,6 +56,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Starting Side", sideChooser);
 
 		compressor.start();
+		gearCam.startProcessing();
+		towerCam.startProcessing();
 		drivetrain.calibrateGyro();
 	}
 
@@ -76,6 +81,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		compressor.start();
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		String startingSide = sideChooser.getSelected();
 		if (gameData.charAt(0) == 'L') {
@@ -131,10 +137,13 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		compressor.start();
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
 		drivetrain.disable();
+		final TeleLift teleLift = new TeleLift(this.lifter, this.wrist);
+		teleLift.start();
 	}
 
 	/**
@@ -144,7 +153,14 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 	}
-
+	
+	@Override
+	public void testInit() {
+		final TeleLift teleLift = new TeleLift(this.lifter, this.wrist);
+		teleLift.start();
+		compressor.start();
+	}
+	
 	/**
 	 * This function is called periodically during test mode.
 	 */

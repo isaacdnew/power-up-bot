@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.vision.VisionThread;
 /**
  * The camera that looks at the cube from the claw (for human use only)
  */
-public class ClawCam extends Subsystem {
+public class TowerCam extends Subsystem {
 	UsbCamera clawCam;
 	final int imgWidth = 160;
 	final int imgHeight = 120;
@@ -22,13 +22,9 @@ public class ClawCam extends Subsystem {
 	final int whiteBalance = 1000;
 
 	VisionThread visionThread;
-	final Object turnAngleSync = new Object();
-	double centerX = 0.0;
-	double lastTurnAngle = 0.0;
-	double turnAngle = 0.0;
 
-	public ClawCam(int port) {
-		clawCam = new UsbCamera("ClawCam", port);
+	public TowerCam(int port) {
+		clawCam = new UsbCamera("TowerCam", port);
 		clawCam.setResolution(imgWidth, imgHeight);
 		clawCam.setFPS(fps);
 		clawCam.setBrightness(brightness);
@@ -42,7 +38,7 @@ public class ClawCam extends Subsystem {
 
 	public void startProcessing() {
 		startRecording();
-		CvSource outputStream = CameraServer.getInstance().putVideo("ClawCam", imgWidth, imgHeight);
+		CvSource outputStream = CameraServer.getInstance().putVideo("TowerCam", imgWidth, imgHeight);
 		visionThread = new VisionThread(clawCam, new ClawCamPipeline(), pipeline -> {
 			outputStream.putFrame(pipeline.blurOutput());
 		});

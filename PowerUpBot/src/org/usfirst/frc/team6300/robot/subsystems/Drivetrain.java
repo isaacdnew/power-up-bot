@@ -65,6 +65,9 @@ public class Drivetrain extends PIDSubsystem {
 		lbMotor.setInverted(RobotMap.lbInverted);
 		rfMotor.setInverted(RobotMap.rfInverted);
 		rbMotor.setInverted(RobotMap.rbInverted);
+		
+		lEncoder.setReverseDirection(RobotMap.lEncoderInverted);
+		rEncoder.setReverseDirection(RobotMap.rEncoderInverted);
 
 		shiftDown();
 	}
@@ -77,8 +80,8 @@ public class Drivetrain extends PIDSubsystem {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		double leftOutput = leftSpeed - output;
-		double rightOutput = rightSpeed + output;
+		double leftOutput = leftSpeed + output;
+		double rightOutput = rightSpeed - output;
 		if (leftOutput > 1 || rightOutput > 1) {
 			double maxOutput = Math.max(leftOutput, rightOutput);
 			leftOutput /= maxOutput;
@@ -91,7 +94,9 @@ public class Drivetrain extends PIDSubsystem {
 	}
 
 	public void calibrateGyro() {
+		SmartDashboard.putBoolean("Gyro Calibrated?", false);
 		gyro.calibrate();
+		SmartDashboard.putBoolean("Gyro Calibrated?", true);
 	}
 
 	// DRIVING

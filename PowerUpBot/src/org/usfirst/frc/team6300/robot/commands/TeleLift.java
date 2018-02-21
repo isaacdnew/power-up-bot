@@ -5,6 +5,7 @@ import org.usfirst.frc.team6300.robot.subsystems.Lifter;
 import org.usfirst.frc.team6300.robot.subsystems.Wrist;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -23,21 +24,23 @@ public class TeleLift extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	lifter.disable();
-    	wrist.enable();
+    	wrist.disable();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (lifter.minVertAngle < lifter.getPosition() && lifter.getPosition() <= lifter.topIllegalAngle) {
+    	if (lifter.minVertLength < lifter.getPosition() && lifter.getPosition() <= lifter.topIllegalLength) {
     		wrist.setSetpoint(wristWRTGround(-90));
     	}
-    	else if (lifter.getPosition() <= lifter.minVertAngle) {
+    	else if (lifter.getPosition() <= lifter.minVertLength) {
     		wrist.setSetpoint(160);
     	}
-    	else if (lifter.topIllegalAngle > lifter.getPosition()) {
+    	else if (lifter.topIllegalLength > lifter.getPosition()) {
     		wrist.setSetpoint(0);
     	}
+    	wrist.setMotor(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY)));
     	lifter.setMotor(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.rightY)));
+    	SmartDashboard.putNumber("Lifter Length", lifter.getPosition());
     }
     
     private double wristWRTGround(double angle) {

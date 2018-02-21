@@ -32,13 +32,13 @@ public class LiftTo extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (wrist.getPIDController().isEnabled()) {
-			if (lifter.startAngle <= lifter.getPosition() && lifter.getPosition() < lifter.minVertAngle) {
+			if (lifter.startLength <= lifter.getPosition() && lifter.getPosition() < lifter.minVertLength) {
 				wrist.setSetpoint(wrist.foldedAngle);
 			}
-			if (lifter.minVertAngle <= lifter.getPosition() && lifter.getPosition() < lifter.topIllegalAngle) {
+			if (lifter.minVertLength <= lifter.getPosition() && lifter.getPosition() < lifter.topIllegalLength) {
 				wrist.setSetpoint(wristWRTGround(-90));
 			}
-			if (lifter.topIllegalAngle <= lifter.getPosition() && lifter.getPosition() < lifter.scaleMaxAngle) {
+			if (lifter.topIllegalLength <= lifter.getPosition() && lifter.getPosition() < lifter.scaleMaxLength) {
 				wrist.setSetpoint(wristWRTGround(0));
 			}
 		}

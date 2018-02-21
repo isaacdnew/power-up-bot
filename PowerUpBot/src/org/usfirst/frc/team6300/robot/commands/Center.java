@@ -13,9 +13,9 @@ public class Center extends CommandGroup {
 		addParallel(new CloseClaw(robot.claw));
 
 		// Set up arms
-		addSequential(new LiftTo(robot, robot.lifter.startAngle));
+		addSequential(new LiftTo(robot, robot.lifter.startLength));
 		addSequential(new CalibrateWrist(robot.wrist));
-		addParallel(new LiftTo(robot, robot.lifter.switchAngle));
+		addParallel(new LiftTo(robot, robot.lifter.switchLength));
 
 		// Drive to auto line, but turn left first to avoid the pile of power cubes
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 0.2));

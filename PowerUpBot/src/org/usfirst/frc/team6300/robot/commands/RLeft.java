@@ -13,9 +13,9 @@ public class RLeft extends CommandGroup {
 		addParallel(new CloseClaw(robot.claw));
 
 		// Set up arms
-		addSequential(new LiftTo(robot, robot.lifter.startAngle));
+		addSequential(new LiftTo(robot, robot.lifter.startLength));
 		addSequential(new CalibrateWrist(robot.wrist));
-		addParallel(new LiftTo(robot, robot.lifter.switchAngle));
+		addParallel(new LiftTo(robot, robot.lifter.switchLength));
 
 		// Drive to switch
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.5));

@@ -33,8 +33,8 @@ public class TeleDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		double forwardSpeed = OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY));
-		double rotateSpeed = OI.deadZone(OI.cubeJoy.getRawAxis(OI.rightX) / (1 + Math.abs(forwardSpeed / 2)));
+		double forwardSpeed = OI.deadZone(-OI.driveJoy.getRawAxis(OI.leftY));
+		double rotateSpeed = OI.deadZone(OI.driveJoy.getRawAxis(OI.rightX) / (1 + Math.abs(forwardSpeed / 2)));
 
 		SmartDashboard.putNumber("forwardSpeed", forwardSpeed);
 		SmartDashboard.putNumber("rotateSpeed", rotateSpeed);
@@ -44,7 +44,7 @@ public class TeleDrive extends Command {
 
 		drivetrain.setSpeeds(leftSpeed, rightSpeed);
 
-		if (Math.abs(drivetrain.getForwardSpeed()) > 18 /* TODO check this number */) {
+		if (Math.abs(drivetrain.getForwardSpeed()) > 80 /* TODO check this number */) {
 			drivetrain.shiftUp();
 		} else {
 			drivetrain.shiftDown();

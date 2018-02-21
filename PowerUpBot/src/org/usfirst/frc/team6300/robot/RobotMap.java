@@ -21,9 +21,9 @@ public class RobotMap {
 	public static final int rfMotor = 2;
 	public static final int rbMotor = 1;
 
-	public static final int liftMotor = 6;
+	public static final int liftMotor = 8;
 
-	public static final int wristMotor = 9; // TODO wire this up
+	public static final int wristMotor = 4;
 
 	public static final int winchMotor = 5; // TODO wire this up
 
@@ -37,7 +37,7 @@ public class RobotMap {
 
 	public static final boolean wristInverted = false; // TODO check this
 
-	public static final boolean winchInverted = false; // TODO check this
+	public static final boolean winchInverted = true; // TODO check this
 
 	// Encoder Ports
 	public static final int lEncoderPort1 = 0;

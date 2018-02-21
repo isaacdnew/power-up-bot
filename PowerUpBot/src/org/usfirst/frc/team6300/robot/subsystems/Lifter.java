@@ -13,16 +13,16 @@ import edu.wpi.first.wpilibj.interfaces.Potentiometer;
  */
 public class Lifter extends PIDSubsystem {
 	// TODO replace these angles with lengths on the linear actuator
-	public final double startAngle = 14;
-	public final double minVertAngle = 6.52;
-	public final double switchAngle = 40;
-	public final double topIllegalAngle = 100;
-	public final double scaleMaxAngle = 160;
-	public final double verticalAngle = 180;
+	public final double startLength = 0;
+	public final double minVertLength = 1.68;
+	public final double switchLength = 5.1;
+	public final double topIllegalLength = 7.8;
+	public final double scaleMaxLength = 6.7; // TODO wrong...
+	public final double verticalLength = 10;
 
 	private SpeedController motor = new VictorSP(RobotMap.liftMotor);
 
-	private final double actuatorRange = 12; // inches
+	private final double actuatorRange = 10; // inches
 	private final double potOffset = 0; // inches
 	private Potentiometer pot = new AnalogPotentiometer(RobotMap.liftPot, actuatorRange, potOffset);
 

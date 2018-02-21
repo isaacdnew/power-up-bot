@@ -24,12 +24,15 @@ public class TeleWinch extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		if (Timer.getMatchTime() < 45) {
-			winch.setMotor(OI.deadZone(OI.cubeJoy.getRawAxis(OI.rTrigAxis))
-					- OI.deadZone(OI.cubeJoy.getRawAxis(OI.lTrigAxis)));
-		} else {
-			winch.setMotor(0);
-		}
+		winch.setMotor(
+				OI.deadZone(OI.cubeJoy.getRawAxis(OI.rTrigAxis)) - OI.deadZone(OI.cubeJoy.getRawAxis(OI.lTrigAxis)));
+
+		// if (Timer.getMatchTime() < 45) {
+		// winch.setMotor(OI.deadZone(OI.cubeJoy.getRawAxis(OI.rTrigAxis))
+		// - OI.deadZone(OI.cubeJoy.getRawAxis(OI.lTrigAxis)));
+		// } else {
+		// winch.setMotor(0);
+		// }
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
