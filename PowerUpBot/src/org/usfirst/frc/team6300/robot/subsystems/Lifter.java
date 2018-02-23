@@ -23,7 +23,7 @@ public class Lifter extends PIDSubsystem {
 	private SpeedController motor = new VictorSP(RobotMap.liftMotor);
 
 	private final double actuatorRange = 10; // inches
-	private final double potOffset = 0; // inches
+	private final double potOffset = 0.0; // inches
 	private Potentiometer pot = new AnalogPotentiometer(RobotMap.liftPot, actuatorRange, potOffset);
 
 	private static final double p = 0.05;
