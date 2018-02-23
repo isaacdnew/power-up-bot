@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.strongback.Strongback;
 import org.usfirst.frc.team6300.robot.commands.*;
 import org.usfirst.frc.team6300.robot.subsystems.*;
 
@@ -68,6 +69,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		Strongback.disable();
 	}
 
 	@Override
@@ -81,6 +83,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		Strongback.start();
 		compressor.start();
 		String gameData = DriverStation.getInstance().getGameSpecificMessage();
 		String startingSide = sideChooser.getSelected();

@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team6300.robot;
 
+import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.commands.*;
 
 import edu.wpi.first.wpilibj.Joystick;
