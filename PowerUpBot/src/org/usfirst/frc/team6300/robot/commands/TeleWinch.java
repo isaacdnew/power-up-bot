@@ -3,7 +3,6 @@ package org.usfirst.frc.team6300.robot.commands;
 import org.usfirst.frc.team6300.robot.OI;
 import org.usfirst.frc.team6300.robot.subsystems.Winch;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
