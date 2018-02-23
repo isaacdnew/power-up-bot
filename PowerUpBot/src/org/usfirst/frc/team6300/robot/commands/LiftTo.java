@@ -1,6 +1,6 @@
 package org.usfirst.frc.team6300.robot.commands;
 
-import org.frc6300.robot.Robot;
+import org.usfirst.frc.team6300.robot.Robot;
 import org.usfirst.frc.team6300.robot.subsystems.Lifter;
 import org.usfirst.frc.team6300.robot.subsystems.Wrist;
 
