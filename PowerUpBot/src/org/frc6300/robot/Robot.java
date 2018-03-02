@@ -7,9 +7,8 @@
 
 package org.frc6300.robot;
 
-import org.frc6300.robot.commands.TeleLift;
-import org.frc6300.robot.subsystems.Lifter;
-import org.frc6300.robot.subsystems.Wrist;
+import org.frc6300.robot.commands.*;
+import org.frc6300.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,21 +28,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-//	private Compressor compressor = new Compressor();
+	private Compressor compressor = new Compressor();
 
 	// Subsystems
-//	public final Drivetrain drivetrain = new Drivetrain();
+	public final Drivetrain drivetrain = new Drivetrain();
 	public final Lifter lifter = new Lifter();
-//	public final Claw claw = new Claw();
+	public final Claw claw = new Claw();
 	public final Wrist wrist = new Wrist();
-//	public final Winch winch = new Winch();
-//	private final ClawCam gearCam = new ClawCam(1);
-//	private final TowerCam towerCam = new TowerCam(0);
+	public final Winch winch = new Winch();
+	private final ClawCam gearCam = new ClawCam(1);
+	private final TowerCam towerCam = new TowerCam(0);
 	
 	public OI oi;
+	
+	private enum StartingSide {
+		LEFT, RIGHT, CENTER
+	}
 
 	Command autonomousCommand;
-	SendableChooser<String> sideChooser = new SendableChooser<>();
+	SendableChooser<StartingSide> sideChooser = new SendableChooser<>();
 
 	/**
 	 * This method is run when the robot is first started up and should be used for
@@ -53,15 +56,15 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		oi = new OI(this);
 
-		sideChooser.addDefault("Starting from Left", "left");
-		sideChooser.addObject("Starting from Center", "center");
-		sideChooser.addObject("Starting from Right", "right");
+		sideChooser.addDefault("Starting from Left", StartingSide.LEFT);
+		sideChooser.addObject("Starting from LCenter", StartingSide.CENTER);
+		sideChooser.addObject("Starting from Right", StartingSide.RIGHT);
 		SmartDashboard.putData("Starting Side", sideChooser);
 
-//		compressor.start();
-//		gearCam.startProcessing();
-//		towerCam.startProcessing();
-//		drivetrain.calibrateGyro();
+		compressor.start();
+		gearCam.startProcessing();
+		towerCam.startProcessing();
+		drivetrain.calibrateGyro();
 	}
 
 	/**
@@ -84,50 +87,50 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-//		compressor.start();
-//		String gameData = DriverStation.getInstance().getGameSpecificMessage();
-//		String startingSide = sideChooser.getSelected();
-//		if (gameData.charAt(0) == 'L') {
-//			switch (startingSide) {
-//			case "left":
-//				autonomousCommand = new LLeft(this);
-//				break;
-//			case "right":
-//				autonomousCommand = new LRight(this);
-//				break;
-//			case "center":
-//				autonomousCommand = new Center(this);
-//				break;
-//			default:
-//				System.out.println("Invalid starting side string!");
-//				break;
-//			}
-//		} else if (gameData.charAt(0) == 'R') {
-//			switch (startingSide) {
-//			case "left":
-//				autonomousCommand = new RLeft(this);
-//				break;
-//			case "right":
-//				autonomousCommand = new RRight(this);
-//				break;
-//			case "center":
-//				autonomousCommand = new Center(this);
-//				break;
-//			default:
-//				System.out.println("Invalid starting side string!");
-//				break;
-//			}
-//		} else {
-//			System.out.println("Invalid game data!");
-//		}
-//		// schedule the autonomous command
-//		if (autonomousCommand != null) {
-//			autonomousCommand.start();
-//		} else {
-//			System.out.println("autonomousCommand is null! Running auto line code.");
-//			autonomousCommand = new AutoDrive(drivetrain, 0.5, 1.0);
-//			autonomousCommand.start();
-//		}
+		compressor.start();
+		String gameData = DriverStation.getInstance().getGameSpecificMessage();
+		StartingSide startingSide = sideChooser.getSelected();
+		if (gameData.charAt(0) == 'L') {
+			switch (startingSide) {
+			case LEFT:
+				autonomousCommand = new LLeft(this);
+				break;
+			case RIGHT:
+				autonomousCommand = new LRight(this);
+				break;
+			case CENTER:
+				autonomousCommand = new LCenter(this);
+				break;
+			default:
+				System.out.println("Invalid starting side!");
+				break;
+			}
+		} else if (gameData.charAt(0) == 'R') {
+			switch (startingSide) {
+			case LEFT:
+				autonomousCommand = new RLeft(this);
+				break;
+			case RIGHT:
+				autonomousCommand = new RRight(this);
+				break;
+			case CENTER:
+				autonomousCommand = new RCenter(this);
+				break;
+			default:
+				System.out.println("Invalid starting side string!");
+				break;
+			}
+		} else {
+			System.out.println("Invalid game data!");
+		}
+		// schedule the autonomous command
+		if (autonomousCommand != null) {
+			autonomousCommand.start();
+		} else {
+			System.out.println("autonomousCommand is null! Running auto line code.");
+			autonomousCommand = new AutoDrive(drivetrain, 0.5, 1.0);
+			autonomousCommand.start();
+		}
 	}
 
 	/**
@@ -140,11 +143,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-//		compressor.start();
+		compressor.start();
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
-//		drivetrain.disable();
+		drivetrain.disable();
 		final TeleLift teleLift = new TeleLift(this.lifter, this.wrist);
 		teleLift.start();
 	}
@@ -161,7 +164,7 @@ public class Robot extends TimedRobot {
 	public void testInit() {
 		final TeleLift teleLift = new TeleLift(this.lifter, this.wrist);
 		teleLift.start();
-//		compressor.start();
+		compressor.start();
 	}
 	
 	/**
