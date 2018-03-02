@@ -31,29 +31,30 @@ public class TeleLift extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		lifter.disable();
-		wrist.disable();
+		if (AUTOMATIC_WRIST) {
+			wrist.enable();
+		} else {
+			wrist.disable();
+		}
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (AUTOMATIC_WRIST) {
-			if (!wrist.getPIDController().isEnabled()) {
-				wrist.enable();
-			}
-
-			if (lifter.getPosition() <= lifter.minVertLength) {
+			wrist.setLifterAngleOffset(getLifterAngle());
+			if (lifter.getPosition() <= Lifter.minVertLength) {
 				// Set setpoint only if it needs to change
 				if (!(lifterPosition == LifterPosition.STOWED)) {
 					wrist.setSetpoint(160);
 				}
 				lifterPosition = LifterPosition.STOWED;
-			} else if (lifter.minVertLength < lifter.getPosition() && lifter.getPosition() <= lifter.topIllegalLength) {
+			} else if (Lifter.minVertLength < lifter.getPosition() && lifter.getPosition() <= Lifter.topIllegalLength) {
 				// Set setpoint only if it needs to change
 				if (!(lifterPosition == LifterPosition.ILLEGAL)) {
 					wrist.setSetpoint(-90);
 				}
 				lifterPosition = LifterPosition.ILLEGAL;
-			} else if (lifter.topIllegalLength < lifter.getPosition()) {
+			} else if (Lifter.topIllegalLength < lifter.getPosition()) {
 				// Set setpoint only if it needs to change
 				if (!(lifterPosition == LifterPosition.TOP_LEGAL)) {
 					wrist.setSetpoint(0);
@@ -63,7 +64,8 @@ public class TeleLift extends Command {
 		} else {
 			wrist.setMotor(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY)));
 		}
-		lifter.setMotor(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.rightY)));
+		lifter.setMotor(OI.deadZone(OI.cubeJoy.getRawAxis(OI.rightY))); // there's no neg sign because we want inverted
+																		// control (pull down = lift up).
 
 		SmartDashboard.putNumber("Lifter Length", lifter.getPosition());
 	}
@@ -80,5 +82,12 @@ public class TeleLift extends Command {
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
+	}
+
+	private double getLifterAngle() {
+		double x = Math.acos(
+				((Lifter.actuatorMountToElbow * Lifter.actuatorMountToElbow) + (Lifter.elbowToRodEnd * Lifter.elbowToRodEnd) - (Lifter.collapsedLength * Lifter.collapsedLength))
+						/ (2 * Lifter.actuatorMountToElbow * Lifter.elbowToRodEnd));
+		return x;
 	}
 }
