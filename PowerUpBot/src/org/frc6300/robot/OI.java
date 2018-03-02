@@ -57,8 +57,8 @@ public class OI {
 		// cubeB.whenPressed(new LiftArmTo("switch"));
 		// cubeY.whenPressed(new LiftArmTo("scale"));
 
-//		cubeLTrig.whenPressed(new OpenClaw(robot.claw));
-//		cubeRTrig.whenPressed(new CloseClaw(robot.claw));
+		cubeLTrig.whenPressed(new OpenClaw(robot.claw));
+		cubeRTrig.whenPressed(new CloseClaw(robot.claw));
 	}
 
 	/**
