@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Wrist extends PIDSubsystem {
 	private SpeedController motor = new VictorSP(RobotMap.wristMotor);
 	private Encoder enc = new Encoder(RobotMap.wristEncPort1, RobotMap.wristEncPort2, false, Encoder.EncodingType.k4X);
-	private static final double initEncOffset = 411.0; // TODO calibrate this
+	private static final double initEncOffset = 100; // TODO calibrate this
 	public static final double foldedAngle = 160.0; // TODO calibrate this
 	private double lifterAngleOffset;
 
@@ -51,7 +51,7 @@ public class Wrist extends PIDSubsystem {
 	@Override
 	public void setSetpoint(double angle) {
 		super.setSetpoint(angle);
-		System.out.println("Setting Setpoint to " + angle);
+		System.out.println("Setting Wrist Setpoint to " + angle);
 	}
 
 	private double getTrueAngle() {
