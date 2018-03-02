@@ -85,9 +85,9 @@ public class TeleLift extends Command {
 	}
 
 	private double getLifterAngle() {
-		double x = Math.acos(
-				((Lifter.actuatorMountToElbow * Lifter.actuatorMountToElbow) + (Lifter.elbowToRodEnd * Lifter.elbowToRodEnd) - (Lifter.collapsedLength * Lifter.collapsedLength))
-						/ (2 * Lifter.actuatorMountToElbow * Lifter.elbowToRodEnd));
-		return x;
+		double a = Lifter.actuatorMountToElbow;
+		double b = Lifter.elbowToRodEnd;
+		double c = Lifter.collapsedLength;
+		return Math.acos(((a*a) + (b*b) - (c*c)) / (2 * a * b));
 	}
 }
