@@ -143,11 +143,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		compressor.start();
+//		compressor.start();
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
-		drivetrain.disable();
+//		drivetrain.disable();
 		final TeleLift teleLift = new TeleLift(this.lifter, this.wrist);
 		teleLift.start();
 	}
@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
 	public void testInit() {
 		final TeleLift teleLift = new TeleLift(this.lifter, this.wrist);
 		teleLift.start();
-		compressor.start();
+//		compressor.start();
 	}
 	
 	/**
