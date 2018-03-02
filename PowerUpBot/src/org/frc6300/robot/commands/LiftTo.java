@@ -14,6 +14,12 @@ public class LiftTo extends Command {
 	private Lifter lifter;
 	private Wrist wrist;
 	private double length;
+	
+	private enum LifterPosition {
+		STOWED, BOTTOM_LEGAL, ILLEGAL, TOP_LEGAL
+	}
+
+	private LifterPosition lifterPosition;
 
 	public LiftTo(Robot robot, double actuatorLength) {
 		this.lifter = robot.lifter;
@@ -32,14 +38,25 @@ public class LiftTo extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (wrist.getPIDController().isEnabled()) {
-			if (lifter.minLength <= lifter.getPosition() && lifter.getPosition() < lifter.minVertLength) {
-				wrist.setSetpoint(wrist.foldedAngle);
-			}
-			if (lifter.minVertLength <= lifter.getPosition() && lifter.getPosition() < lifter.topIllegalLength) {
-				wrist.setSetpoint(wristWRTGround(-90));
-			}
-			if (lifter.topIllegalLength <= lifter.getPosition() && lifter.getPosition() < lifter.scaleMaxLength) {
-				wrist.setSetpoint(wristWRTGround(0));
+			wrist.setLifterAngleOffset(lifter.getPosition());
+			if (lifter.getPosition() <= Lifter.minVertLength) {
+				// Set setpoint only if it needs to change
+				if (!(lifterPosition == LifterPosition.STOWED)) {
+					wrist.setSetpoint(160);
+				}
+				lifterPosition = LifterPosition.STOWED;
+			} else if (Lifter.minVertLength < lifter.getPosition() && lifter.getPosition() <= Lifter.topIllegalLength) {
+				// Set setpoint only if it needs to change
+				if (!(lifterPosition == LifterPosition.ILLEGAL)) {
+					wrist.setSetpoint(-90);
+				}
+				lifterPosition = LifterPosition.ILLEGAL;
+			} else if (Lifter.topIllegalLength < lifter.getPosition()) {
+				// Set setpoint only if it needs to change
+				if (!(lifterPosition == LifterPosition.TOP_LEGAL)) {
+					wrist.setSetpoint(0);
+				}
+				lifterPosition = LifterPosition.TOP_LEGAL;
 			}
 		}
 	}
@@ -61,9 +78,5 @@ public class LiftTo extends Command {
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-	}
-
-	private double wristWRTGround(double angle) {
-		return angle - lifter.getPosition();
 	}
 }
