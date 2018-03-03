@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TeleLift extends Command {
 	private Lifter lifter;
 	private Wrist wrist;
-	private static final boolean AUTOMATIC_WRIST = true;
+	private static final boolean AUTOMATIC_WRIST = false;
 
 	private enum LifterPosition {
 		STOWED, BOTTOM_LEGAL, ILLEGAL, TOP_LEGAL
@@ -62,11 +62,10 @@ public class TeleLift extends Command {
 				lifterPosition = LifterPosition.TOP_LEGAL;
 			}
 		} else {
-			wrist.setMotor(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY)));
+			wrist.setMotor(OI.deadZone(-OI.cubeJoy.getRawAxis(OI.leftY)) * 0.75);
 		}
 		lifter.setMotor(OI.deadZone(OI.cubeJoy.getRawAxis(OI.rightY))); // there's no neg sign because we want inverted
 																		// control (pull down = lift up).
-
 		SmartDashboard.putNumber("Lifter Length", lifter.getPosition());
 	}
 

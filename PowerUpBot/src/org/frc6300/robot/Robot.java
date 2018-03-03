@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
 		oi = new OI(this);
 
 		sideChooser.addDefault("Starting from Left", StartingSide.LEFT);
-		sideChooser.addObject("Starting from LCenter", StartingSide.CENTER);
+		sideChooser.addObject("Starting from Center", StartingSide.CENTER);
 		sideChooser.addObject("Starting from Right", StartingSide.RIGHT);
 		SmartDashboard.putData("Starting Side", sideChooser);
 
@@ -94,12 +94,15 @@ public class Robot extends TimedRobot {
 			switch (startingSide) {
 			case LEFT:
 				autonomousCommand = new LLeft(this);
+				System.out.println("LLeft");
 				break;
 			case RIGHT:
 				autonomousCommand = new LRight(this);
+				System.out.println("LRight");
 				break;
 			case CENTER:
 				autonomousCommand = new LCenter(this);
+				System.out.println("LCenter");
 				break;
 			default:
 				System.out.println("Invalid starting side!");
@@ -109,12 +112,15 @@ public class Robot extends TimedRobot {
 			switch (startingSide) {
 			case LEFT:
 				autonomousCommand = new RLeft(this);
+				System.out.println("RLeft");
 				break;
 			case RIGHT:
 				autonomousCommand = new RRight(this);
+				System.out.println("RRight");
 				break;
 			case CENTER:
 				autonomousCommand = new RCenter(this);
+				System.out.println("RCenter");
 				break;
 			default:
 				System.out.println("Invalid starting side string!");
@@ -128,7 +134,7 @@ public class Robot extends TimedRobot {
 			autonomousCommand.start();
 		} else {
 			System.out.println("autonomousCommand is null! Running auto line code.");
-			autonomousCommand = new AutoDrive(drivetrain, 0.5, 1.0);
+			autonomousCommand = new AutoDrive(drivetrain, 0.5, 2.0);
 			autonomousCommand.start();
 		}
 	}

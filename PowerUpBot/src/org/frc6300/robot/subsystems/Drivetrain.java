@@ -87,15 +87,17 @@ public class Drivetrain extends PIDSubsystem {
 			leftOutput /= maxOutput;
 			rightOutput /= maxOutput;
 		}
-		lfMotor.set(leftOutput);
-		lbMotor.set(leftOutput);
-		rfMotor.set(rightOutput);
-		rbMotor.set(rightOutput);
+		lfMotor.set(leftOutput * 0.5);
+		lbMotor.set(leftOutput * 0.5);
+		rfMotor.set(rightOutput * 0.5);
+		rbMotor.set(rightOutput * 0.5);
 	}
 
 	public void calibrateGyro() {
+		System.out.println("Calibrating the gyro...");
 		SmartDashboard.putBoolean("Gyro Calibrated?", false);
 		gyro.calibrate();
+		System.out.println("Gyro calibrated.");
 		SmartDashboard.putBoolean("Gyro Calibrated?", true);
 	}
 

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Lifter extends PIDSubsystem {
 	// TODO calibrate these lengths
-	public static final double minLength = 1;
+	public static final double minLength = 0.45;
 	public static final double minVertLength = 1.68;
 	public static final double switchLength = 5.1;
 	public static final double topIllegalLength = 7.8;
@@ -86,10 +86,20 @@ public class Lifter extends PIDSubsystem {
 				motor.set(power);
 				SmartDashboard.putBoolean("Lifter at end?", false);
 			} else if (getPosition() <= minLength) {
-				motor.set(0.2);
+				if (power > 0) {
+					motor.set(power);
+				}
+				else {
+					motor.set(0);
+				}
 				SmartDashboard.putBoolean("Lifter at end?", true);
-			} else if (maxLength <= getPosition()) {
-				motor.set(-0.2);
+			} else if (maxLength <= getPosition() && power < 0) {
+				if (power < 0) {
+					motor.set(power);
+				}
+				else {
+					motor.set(0);
+				}
 				SmartDashboard.putBoolean("Lifter at end?", true);
 			}
 		}

@@ -11,15 +11,14 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class LLeft extends CommandGroup {
 	public LLeft(Robot robot) {
 		// Hold onto the cube
-		addParallel(new CloseClaw(robot.claw));
+		addSequential(new CloseClaw(robot.claw));
 
-		// Set up arms
-		addSequential(new LiftTo(robot, Lifter.minLength));
-		addSequential(new CalibrateWrist(robot.wrist));
-		addParallel(new LiftTo(robot, Lifter.switchLength));
+		// Flop and then lift
+		addSequential(new AutoWrist(robot.wrist, 0.5, 0.2));
+		addSequential(new AutoLift(robot.lifter, 1.0, 1.3));
 
 		// Drive to switch
-		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
+		addSequential(new AutoDrive(robot.drivetrain, 0.5, 2.2));
 		addSequential(new Rotate(robot.drivetrain, 90));
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
 

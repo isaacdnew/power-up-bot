@@ -13,13 +13,12 @@ public class LRight extends CommandGroup {
 		// Hold onto the cube
 		addParallel(new CloseClaw(robot.claw));
 
-		// Set up arms
-		addSequential(new LiftTo(robot, Lifter.minLength));
-		addSequential(new CalibrateWrist(robot.wrist));
-		addParallel(new LiftTo(robot, Lifter.switchLength));
+		// Flop and lift simultaneously
+		addParallel(new AutoWrist(robot.wrist, 0.5, 0.2));
+		addParallel(new AutoLift(robot.lifter, 1.0, 1.0));
 
 		// Drive to switch
-		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.5));
+		addSequential(new AutoDrive(robot.drivetrain, 0.5, 2.3));
 		addSequential(new Rotate(robot.drivetrain, -90));
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 5.0));
 		addSequential(new Rotate(robot.drivetrain, -90));

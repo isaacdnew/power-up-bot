@@ -14,12 +14,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Wrist extends PIDSubsystem {
 	private SpeedController motor = new VictorSP(RobotMap.wristMotor);
 	private Encoder enc = new Encoder(RobotMap.wristEncPort1, RobotMap.wristEncPort2, false, Encoder.EncodingType.k4X);
-	private static final double initEncOffset = 100; // TODO calibrate this
-	public static final double foldedAngle = 160.0; // TODO calibrate this
+	private static final double initEncOffset = 0; // TODO calibrate this
+	public static final double foldedAngle = 0; // TODO calibrate this
 	private double lifterAngleOffset;
 
-	private static final double p = 0.1;
-	private static final double i = 0.005;
+	private static final double p = 0.01;
+	private static final double i = 0.0;
 	private static final double d = 0.0;
 	private static final double feedForward = 0.0;
 	private static final double pidPeriod = 0.005;
@@ -44,7 +44,7 @@ public class Wrist extends PIDSubsystem {
 	}
 
 	protected void usePIDOutput(double output) {
-		motor.set(output);
+		motor.set(-output);
 		SmartDashboard.putNumber("Wrist PID Output", output);
 	}
 

@@ -13,10 +13,9 @@ public class RCenter extends CommandGroup {
 		// Hold onto the cube
 		addParallel(new CloseClaw(robot.claw));
 
-		// Set up arms
-		addSequential(new LiftTo(robot, Lifter.minLength));
-		addSequential(new CalibrateWrist(robot.wrist));
-		addParallel(new LiftTo(robot, Lifter.switchLength));
+		// Flop and lift simultaneously
+		addParallel(new AutoWrist(robot.wrist, 0.5, 0.2));
+		addParallel(new AutoLift(robot.lifter, 1.0, 1.0));
 
 		// Drive to auto line, but turn left first to avoid the pile of power cubes
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 0.2));
@@ -24,6 +23,6 @@ public class RCenter extends CommandGroup {
 		addSequential(new AutoDrive(robot.drivetrain, 0.5, 3.0));
 
 		// Drop cube on switch
-		addSequential(new OpenClaw(robot.claw));   
+		addSequential(new OpenClaw(robot.claw));
 	}
 }
