@@ -13,14 +13,13 @@ public class LLeft extends CommandGroup {
 		// Hold onto the cube
 		addSequential(new CloseClaw(robot.claw));
 
-		// Flop and then lift
-		addSequential(new AutoWrist(robot.wrist, 0.5, 0.2));
-		addSequential(new AutoLift(robot.lifter, 1.0, 1.3));
+		// Lift
+		addSequential(new AutoLift(robot.lifter, 1.0, 1.5));
 
 		// Drive to switch
-		addSequential(new AutoDrive(robot.drivetrain, 0.5, 2.2));
+		addSequential(new AutoDrive(robot.drivetrain, 1.0, 3.0));
 		addSequential(new Rotate(robot.drivetrain, 90));
-		addSequential(new AutoDrive(robot.drivetrain, 0.5, 1.0));
+		addParallel(new AutoDrive(robot.drivetrain, 0.7, 5.0));
 
 		// Drop cube on switch
 		addSequential(new OpenClaw(robot.claw));

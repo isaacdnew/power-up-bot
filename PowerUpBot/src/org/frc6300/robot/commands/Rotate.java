@@ -4,6 +4,7 @@ import org.frc6300.robot.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -26,6 +27,10 @@ public class Rotate extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	drivetrain.shiftDown();
+    	drivetrain.enable();
+    	drivetrain.setSpeeds(0, 0);
+    	drivetrain.setSetpoint(drivetrain.getSetpoint() + degrees);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -34,20 +39,11 @@ public class Rotate extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return true;
+    	return drivetrain.onTarget();
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	drivetrain.shiftDown();
-    	if (!drivetrain.getPIDController().isEnabled()) {
-    		drivetrain.enable();
-    	}
-    	drivetrain.setSpeeds(0, 0);
-    	drivetrain.setSetpointRelative(degrees);
-    	while (!drivetrain.onTarget()) {
-    		Timer.delay(0.05);
-    	}
     }
 
     // Called when another command which requires one or more of the same

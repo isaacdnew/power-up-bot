@@ -66,7 +66,7 @@ public class TeleLift extends Command {
 		}
 		lifter.setMotor(OI.deadZone(OI.cubeJoy.getRawAxis(OI.rightY))); // there's no neg sign because we want inverted
 																		// control (pull down = lift up).
-		SmartDashboard.putNumber("Lifter Length", lifter.getPosition());
+		//SmartDashboard.putNumber("Lifter Length", lifter.getPosition());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

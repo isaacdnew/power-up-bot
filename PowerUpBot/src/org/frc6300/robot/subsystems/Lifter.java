@@ -82,26 +82,27 @@ public class Lifter extends PIDSubsystem {
 		if (getPIDController().isEnabled()) {
 			System.out.println("Lifter PID enabled; not setting motor.");
 		} else {
-			if (minLength < getPosition() && getPosition() < maxLength) {
-				motor.set(power);
-				SmartDashboard.putBoolean("Lifter at end?", false);
-			} else if (getPosition() <= minLength) {
-				if (power > 0) {
-					motor.set(power);
-				}
-				else {
-					motor.set(0);
-				}
-				SmartDashboard.putBoolean("Lifter at end?", true);
-			} else if (maxLength <= getPosition() && power < 0) {
-				if (power < 0) {
-					motor.set(power);
-				}
-				else {
-					motor.set(0);
-				}
-				SmartDashboard.putBoolean("Lifter at end?", true);
-			}
+//			if (minLength < getPosition() && getPosition() < maxLength) {
+//				motor.set(power);
+//				SmartDashboard.putBoolean("Lifter at end?", false);
+//			} else if (getPosition() <= minLength) {
+//				if (power > 0) {
+//					motor.set(power);
+//				}
+//				else {
+//					motor.set(0);
+//				}
+//				SmartDashboard.putBoolean("Lifter at end?", true);
+//			} else if (maxLength <= getPosition() && power < 0) {
+//				if (power < 0) {
+//					motor.set(power);
+//				}
+//				else {
+//					motor.set(0);
+//				}
+//				SmartDashboard.putBoolean("Lifter at end?", true);
+//			}
+			motor.set(power);
 		}
 	}
 }

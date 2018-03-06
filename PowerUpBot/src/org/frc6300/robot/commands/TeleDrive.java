@@ -34,7 +34,7 @@ public class TeleDrive extends Command {
 	@Override
 	protected void execute() {
 		double forwardSpeed = OI.deadZone(-OI.driveJoy.getRawAxis(OI.leftY));
-		double rotateSpeed = OI.deadZone(OI.driveJoy.getRawAxis(OI.rightX) * 0.6);
+		double rotateSpeed = OI.deadZone(OI.driveJoy.getRawAxis(OI.rightX) * 0.8);
 
 		SmartDashboard.putNumber("forwardSpeed", forwardSpeed);
 		SmartDashboard.putNumber("rotateSpeed", rotateSpeed);

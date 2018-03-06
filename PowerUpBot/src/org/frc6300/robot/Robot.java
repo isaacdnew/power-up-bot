@@ -101,8 +101,8 @@ public class Robot extends TimedRobot {
 				System.out.println("LRight");
 				break;
 			case CENTER:
-				autonomousCommand = new LCenter(this);
-				System.out.println("LCenter");
+				autonomousCommand = new Center(this);
+				System.out.println("Center");
 				break;
 			default:
 				System.out.println("Invalid starting side!");
@@ -119,11 +119,11 @@ public class Robot extends TimedRobot {
 				System.out.println("RRight");
 				break;
 			case CENTER:
-				autonomousCommand = new RCenter(this);
-				System.out.println("RCenter");
+				autonomousCommand = new Center(this);
+				System.out.println("Center");
 				break;
 			default:
-				System.out.println("Invalid starting side string!");
+				System.out.println("Invalid starting side!");
 				break;
 			}
 		} else {

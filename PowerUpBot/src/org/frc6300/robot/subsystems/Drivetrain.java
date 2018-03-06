@@ -92,6 +92,11 @@ public class Drivetrain extends PIDSubsystem {
 		rfMotor.set(rightOutput * 0.5);
 		rbMotor.set(rightOutput * 0.5);
 	}
+	
+	@Override
+	public void setSetpoint(double setpoint) {
+		super.setSetpoint(setpoint - (360 * Math.floor(setpoint / 360)));
+	}
 
 	public void calibrateGyro() {
 		System.out.println("Calibrating the gyro...");
@@ -155,7 +160,7 @@ public class Drivetrain extends PIDSubsystem {
 		SmartDashboard.putNumber("Right Enc Dist", rEncoder.getDistance());
 		SmartDashboard.putNumber("Right Enc Rate", rEncoder.getRate());
 	}
-
+	
 	// MISCELLANEOUS
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleDrive(this));
